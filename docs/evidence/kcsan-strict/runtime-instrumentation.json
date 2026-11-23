@@ -1,0 +1,5 @@
+{
+  "kcsan_enabled_early": true,
+  "kcsan_strict_runtime": true,
+  "online_cpus": 2
+}

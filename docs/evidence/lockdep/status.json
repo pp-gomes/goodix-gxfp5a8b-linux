@@ -1,0 +1,11 @@
+{
+  "profile": "lockdep",
+  "status": "passed",
+  "phase": "complete",
+  "kernel_executed_and_verified": true,
+  "started_utc": "2026-11-03T06:09:09Z",
+  "execution_attempted": true,
+  "kernel_ktap_observed": true,
+  "original_source_unchanged": true,
+  "finished_utc": "2026-11-03T06:13:06Z"
+}

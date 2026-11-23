@@ -1,0 +1,7 @@
+{
+  "repository": "https://github.com/torvalds/linux.git",
+  "commit": "adc218676eef25575469234709c2d87185ca223a",
+  "version": "6.12",
+  "reference": "v6.12",
+  "reference_url": "https://github.com/torvalds/linux/commit/adc218676eef25575469234709c2d87185ca223a"
+}

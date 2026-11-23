@@ -1,0 +1,8 @@
+{
+  "origin": "v0.6, read-only reference; pure protocol functions ported to Linux types; exchange/staging replaced",
+  "sha256": {
+    "include/goodix_protocol.h": "147f7fc467da45f3c2bb005999832e4a97205920dcaf893377425371adfb1544",
+    "src/goodix_protocol.c": "ca62c81dbd6c7df81f84430e343e0ddd4fa4245662192483363d3f553e908e79",
+    "fixtures/windows-a8.json": "e8728ba62bf35cf4cd22a941b1f8d960414677c3a2ae6ec0891606bcd7138582"
+  }
+}

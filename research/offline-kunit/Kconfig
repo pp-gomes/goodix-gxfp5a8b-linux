@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: GPL-2.0-only
+config GX_OFFLINE_KUNIT_TEST
+	tristate "Goodix protocol OFFLINE KUnit tests"
+	depends on KUNIT
+	default n
+	help
+	  Memory-only protocol and synthetic workqueue tests. No physical
+	  transport, device registration, ACPI aliases or hardware enable switch.

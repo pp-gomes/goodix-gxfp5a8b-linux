@@ -1,0 +1,18 @@
+{
+  "provenance": "Bytes and aggregate observations supplied by the user from real Windows logs; original logs are not present in this workspace. Not 17 independently replayed captures.",
+  "driver_version": "3.1.100.320",
+  "installed_inf": "oem51.inf",
+  "wbdi_sha256": "7437C02CABD69F25EAECED55F901B965625B9FCBB7FB45EBD2C32A5D9E4E609A",
+  "selfcheck_successes_reported": 17,
+  "hardreset_occurrences_reported": 0,
+  "cpu_00a1_reads_reported": 14,
+  "firmware": "GF3268_GM168SEC_APP_20011",
+  "request_spi": "F0 3D 00 00 0A A0 06 00 A6 A8 03 00 00 00 FF",
+  "ack_header": "A0 06 00 A6",
+  "ack_body": "B0 03 00 A8 01 4E",
+  "version_header": "A0 1E 00 BE",
+  "version_body": "A8 1B 00 47 46 33 32 36 38 5F 47 4D 31 36 38 53 45 43 5F 41 50 50 5F 32 30 30 31 31 00 87",
+  "cpu_select_tx": "F0 00 A8",
+  "cpu_read_tx": "F1",
+  "cpu_rx": "00 A1"
+}

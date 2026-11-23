@@ -1,0 +1,34 @@
+KTAP version 1
+1..1
+    KTAP version 1
+    # Subtest: gx-offline-v07
+    # module: gx_offline_test
+    1..25
+    ok 1 real_protocol
+    ok 2 malformed_protocol
+    ok 3 staging_lifetime
+    ok 4 staging_odd_and_bounds
+    ok 5 ordered_events
+    ok 6 out_of_order
+    ok 7 duplicate_ack
+    ok 8 rejected_ack
+    ok 9 invalid_async_packet
+    ok 10 invalid_version
+    ok 11 timeout_ack
+    ok 12 timeout_data
+    ok 13 late_packet_times_out
+    ok 14 cancel_processing
+    ok 15 cancel_data_processing
+    ok 16 previous_generations
+    ok 17 two_workers_and_owned_queue
+    ok 18 queue_overflow
+    ok 19 remove_processing
+    ok 20 cancelled_header_body
+    ok 21 completion_timeout_race
+    ok 22 generation_and_deadline_bounds
+    ok 23 restart_with_old_worker
+    ok 24 source_bounds
+    ok 25 ack_deadline_overflow
+# gx-offline-v07: pass:25 fail:0 skip:0 total:25
+# Totals: pass:25 fail:0 skip:0 total:25
+ok 1 gx-offline-v07

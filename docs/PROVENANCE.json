@@ -1,0 +1,875 @@
+{
+  "files": [
+    {
+      "destination": ".github/workflows/goodix-kcsan-qemu.yml",
+      "origin": ".github/workflows/goodix-kcsan-qemu.yml",
+      "origin_sha256": "215e09237a188f84920a4d2e847444ccd811877148d5a08284e61e859728f1c8",
+      "publication_sha256": "651c186035f868f3ab9bc82195c6a37060d3447e46ec84298a3423085ed9891c",
+      "modified": true
+    },
+    {
+      "destination": ".github/workflows/goodix-kunit.yml",
+      "origin": ".github/workflows/goodix-kunit.yml",
+      "origin_sha256": "2e1c3c89b00f1a4d87d935f13ce48c3c90bd45abfbcf3fa87c632ce80c475330",
+      "publication_sha256": "749ad0d4f9e293bdd581e5806fb9917f466eb80d3e0dcc391caa8332211c4a96",
+      "modified": true
+    },
+    {
+      "destination": "AGENTS.md",
+      "origin": "AGENTS.md",
+      "origin_sha256": "032424892fc1f4645109cc2da2fa5620536f420c322f483017905c64fcba6f13",
+      "publication_sha256": "9565941adc854cf8dfe5ad7c3b21d2484c3489e22959461841db098110ee8c6b",
+      "modified": true
+    },
+    {
+      "destination": "ci/goodix/.gitignore",
+      "origin": "ci/goodix/.gitignore",
+      "origin_sha256": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793",
+      "publication_sha256": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/KCSAN-QEMU.md",
+      "origin": "ci/goodix/KCSAN-QEMU.md",
+      "origin_sha256": "e945a7816cd535166965510da57e843d1e5f483172cfde9276e397055d5b65cb",
+      "publication_sha256": "e6bb813f39b8be09a744c85591c6e8f8eead9cfcfb3b39a598ec56ba1c3f128c",
+      "modified": true
+    },
+    {
+      "destination": "ci/goodix/README.md",
+      "origin": "ci/goodix/README.md",
+      "origin_sha256": "14cece0db7cf9cfe866cd627d12ad526409efdf40066d51e80ddf9ade248180f",
+      "publication_sha256": "f62aee21ac220155fadbf1f6a2be631b0ba6ee4463fe0d503ff29b92d47ac3cb",
+      "modified": true
+    },
+    {
+      "destination": "ci/goodix/build_evidence.py",
+      "origin": "ci/goodix/build_evidence.py",
+      "origin_sha256": "9fbcef42c13c6019dfbb6a0b35fdd19403c03e3e2a72a6032faf1506c72fb27e",
+      "publication_sha256": "9fbcef42c13c6019dfbb6a0b35fdd19403c03e3e2a72a6032faf1506c72fb27e",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/fetch-kernel.sh",
+      "origin": "ci/goodix/fetch-kernel.sh",
+      "origin_sha256": "3e36c005182b72b5b0d533d3780ea023f0843c4ed64cb4d089c097db3334873c",
+      "publication_sha256": "3e36c005182b72b5b0d533d3780ea023f0843c4ed64cb4d089c097db3334873c",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/finalize.py",
+      "origin": "ci/goodix/finalize.py",
+      "origin_sha256": "58a37503cbddb3d7d47ee2f888c31de515be6b9b96c87d808d882f2147c86916",
+      "publication_sha256": "58a37503cbddb3d7d47ee2f888c31de515be6b9b96c87d808d882f2147c86916",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/finalize_kcsan_qemu.py",
+      "origin": "ci/goodix/finalize_kcsan_qemu.py",
+      "origin_sha256": "95f69645783bcbb19265bde3e10d1ea812e1af92e6948944c54915470d78cdd8",
+      "publication_sha256": "95f69645783bcbb19265bde3e10d1ea812e1af92e6948944c54915470d78cdd8",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/kcsan_qemu_checks.py",
+      "origin": "ci/goodix/kcsan_qemu_checks.py",
+      "origin_sha256": "3746117b35812ee488f95478419ed200008b7c031714802209acbb84a220bdf5",
+      "publication_sha256": "3746117b35812ee488f95478419ed200008b7c031714802209acbb84a220bdf5",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/kernel.json",
+      "origin": "ci/goodix/kernel.json",
+      "origin_sha256": "0bad8439eacd15b941355e9877df7b244a9466184404490f050b2506c35ba4a1",
+      "publication_sha256": "0bad8439eacd15b941355e9877df7b244a9466184404490f050b2506c35ba4a1",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/profiles/basic.config",
+      "origin": "ci/goodix/profiles/basic.config",
+      "origin_sha256": "95fc6f5be5c4cac461d17a263d7e467dcd2c25214e970d5362a29228e2b8350b",
+      "publication_sha256": "95fc6f5be5c4cac461d17a263d7e467dcd2c25214e970d5362a29228e2b8350b",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/profiles/kasan.config",
+      "origin": "ci/goodix/profiles/kasan.config",
+      "origin_sha256": "228a66d9f60080a2a5d624069f8cfc0f253838721c60e7c5d590c849a15f81d0",
+      "publication_sha256": "228a66d9f60080a2a5d624069f8cfc0f253838721c60e7c5d590c849a15f81d0",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/profiles/kcsan-x86_64.config",
+      "origin": "ci/goodix/profiles/kcsan-x86_64.config",
+      "origin_sha256": "4e482a8644f73d2cc4288d77be45c138e3ae319826ad4e487494a0f328fb19db",
+      "publication_sha256": "4e482a8644f73d2cc4288d77be45c138e3ae319826ad4e487494a0f328fb19db",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/profiles/kcsan.config",
+      "origin": "ci/goodix/profiles/kcsan.config",
+      "origin_sha256": "3f76f7e4646e8ddb9279300be14e031b16badf6272d8b99f62d4929ee62a4d8f",
+      "publication_sha256": "3f76f7e4646e8ddb9279300be14e031b16badf6272d8b99f62d4929ee62a4d8f",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/profiles/lockdep.config",
+      "origin": "ci/goodix/profiles/lockdep.config",
+      "origin_sha256": "d538ed832fadbed35955465203f5f1d78b7c767f0d4722f5862877f070697479",
+      "publication_sha256": "d538ed832fadbed35955465203f5f1d78b7c767f0d4722f5862877f070697479",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/run.py",
+      "origin": "ci/goodix/run.py",
+      "origin_sha256": "78e768908bb6d1db60ca86afd0c5a366a86c389650348fd719610306aef02a1e",
+      "publication_sha256": "78e768908bb6d1db60ca86afd0c5a366a86c389650348fd719610306aef02a1e",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/run_kcsan_qemu.py",
+      "origin": "ci/goodix/run_kcsan_qemu.py",
+      "origin_sha256": "e161a75cd52f9924c731961e4f8de0ce023c0a72f0106df55c847eec9b27d942",
+      "publication_sha256": "e161a75cd52f9924c731961e4f8de0ce023c0a72f0106df55c847eec9b27d942",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/tests/test_build_evidence.py",
+      "origin": "ci/goodix/tests/test_build_evidence.py",
+      "origin_sha256": "d3f4a54c486b803a027881e3e4826d20cdbdad46380291be74da2eaba3ea9968",
+      "publication_sha256": "d5c98cfbcd141231e761c07d924e748170aff5ff98def0f12c24fd8243788a1a",
+      "modified": true
+    },
+    {
+      "destination": "ci/goodix/tests/test_ci.py",
+      "origin": "ci/goodix/tests/test_ci.py",
+      "origin_sha256": "13406455d4c748e5270c97ebfb1a6fa8a09a5081ada06ba6b601a8a3753530a9",
+      "publication_sha256": "cdfdbf915f362b3c3d08e9f5d0e8689dc6bd45ebb015eb8de3cfb3e48d5819ea",
+      "modified": true
+    },
+    {
+      "destination": "ci/goodix/tests/test_kcsan_qemu.py",
+      "origin": "ci/goodix/tests/test_kcsan_qemu.py",
+      "origin_sha256": "fbec1ab072fa5787d8c8fbdf3d43716f4980b48828bd93946d26ee7a55e59fa5",
+      "publication_sha256": "fbec1ab072fa5787d8c8fbdf3d43716f4980b48828bd93946d26ee7a55e59fa5",
+      "modified": false
+    },
+    {
+      "destination": "ci/goodix/verify_ktap.py",
+      "origin": "ci/goodix/verify_ktap.py",
+      "origin_sha256": "2f1a9ab73a633c6a56f576eb433fdeb717cb2c78a6c52e7c7bbb582936cab92b",
+      "publication_sha256": "2f1a9ab73a633c6a56f576eb433fdeb717cb2c78a6c52e7c7bbb582936cab92b",
+      "modified": false
+    },
+    {
+      "destination": "docs/COMPONENT_TRACEABILITY.md",
+      "origin": "COMPONENT_TRACEABILITY.md",
+      "origin_sha256": "efb1f9291534c033726673d0dbbb6a9555370463564dea5823fb17a3a0903dbc",
+      "publication_sha256": "a8f53ac2add4613ae8650256561c3d1024f4b0a632a4fff46d9ad7d93e8a27ce",
+      "modified": true
+    },
+    {
+      "destination": "docs/CURRENT_STATUS.md",
+      "origin": "CURRENT_STATUS.md",
+      "origin_sha256": "1b7071961bc32f4ca2c9249a2113de2a8ae6e80c59a5f876ea8a1a4f00f4c9bf",
+      "publication_sha256": "85f98c1867fe7706cee72ae317875f9ab963301f9044af5da5d33f66910045a4",
+      "modified": true
+    },
+    {
+      "destination": "docs/NEXT_STEPS.md",
+      "origin": "NEXT_STEPS.md",
+      "origin_sha256": "d382be05ec81fd63f054a3cd23ba28c666be8ddd526273ffeca26a3eabc547b0",
+      "publication_sha256": "c1cda4b1f3048449870c213761ac5bd64324a4140def771b338786f9091d79fd",
+      "modified": true
+    },
+    {
+      "destination": "docs/ROADMAP.md",
+      "origin": "ROADMAP.md",
+      "origin_sha256": "6aea29d880dd9de66a853207fcbdf25294afe4428b2f218036aad963ff2dd1ca",
+      "publication_sha256": "8064fd7862b857ee4359ee376a483cb1aeb48bae98e11a8e235ded7531e305ac",
+      "modified": true
+    },
+    {
+      "destination": "docs/V03_SPI_TRANSPORT_GAPS.md",
+      "origin": "V03_SPI_TRANSPORT_GAPS.md",
+      "origin_sha256": "3a727c1b9e29eceec75a3fe66a2a041980cb854a01d06b4d0c3dd9822fa23903",
+      "publication_sha256": "7328b1a0a7e5c50c5def4a2070d836bb409227f9db5b1537807e201c703a2d41",
+      "modified": true
+    },
+    {
+      "destination": "docs/evidence/basic/gx-offline-v07.ktap",
+      "origin": "goodix-uml-basic-41587557124-1.zip!gx-offline-v07.ktap",
+      "origin_sha256": "f2b3e12c50fef399255e9f5c538a39c165fc08c8e5aa22288e5a18957ee28461",
+      "publication_sha256": "f2b3e12c50fef399255e9f5c538a39c165fc08c8e5aa22288e5a18957ee28461",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/basic/gx-source-sha256.json",
+      "origin": "goodix-uml-basic-41587557124-1.zip!gx-source-sha256.json",
+      "origin_sha256": "de2a3a2f4a991071430c288856fd70b2d6bbdefaf0de439489073cf482608ca1",
+      "publication_sha256": "de2a3a2f4a991071430c288856fd70b2d6bbdefaf0de439489073cf482608ca1",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/basic/status.json",
+      "origin": "goodix-uml-basic-41587557124-1.zip!status.json",
+      "origin_sha256": "acb14f87ff988e285f315904b0276494c2ba9020688a66db0eecfbd2c650b49f",
+      "publication_sha256": "acb14f87ff988e285f315904b0276494c2ba9020688a66db0eecfbd2c650b49f",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/basic/verified-results.json",
+      "origin": "goodix-uml-basic-41587557124-1.zip!verified-results.json",
+      "origin_sha256": "7fbfb84159194683aa77499ad290a8d781264b0dd6e4dae84f93cb08a01fced4",
+      "publication_sha256": "7fbfb84159194683aa77499ad290a8d781264b0dd6e4dae84f93cb08a01fced4",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/kasan/gx-offline-v07.ktap",
+      "origin": "goodix-uml-kasan-41587557124-1.zip!gx-offline-v07.ktap",
+      "origin_sha256": "f2b3e12c50fef399255e9f5c538a39c165fc08c8e5aa22288e5a18957ee28461",
+      "publication_sha256": "f2b3e12c50fef399255e9f5c538a39c165fc08c8e5aa22288e5a18957ee28461",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/kasan/gx-source-sha256.json",
+      "origin": "goodix-uml-kasan-41587557124-1.zip!gx-source-sha256.json",
+      "origin_sha256": "de2a3a2f4a991071430c288856fd70b2d6bbdefaf0de439489073cf482608ca1",
+      "publication_sha256": "de2a3a2f4a991071430c288856fd70b2d6bbdefaf0de439489073cf482608ca1",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/kasan/status.json",
+      "origin": "goodix-uml-kasan-41587557124-1.zip!status.json",
+      "origin_sha256": "96f1245031068677cff53b8d44bd2bb91bc5281ae04c8e1ea06d5370895f04b2",
+      "publication_sha256": "96f1245031068677cff53b8d44bd2bb91bc5281ae04c8e1ea06d5370895f04b2",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/kasan/verified-results.json",
+      "origin": "goodix-uml-kasan-41587557124-1.zip!verified-results.json",
+      "origin_sha256": "7fbfb84159194683aa77499ad290a8d781264b0dd6e4dae84f93cb08a01fced4",
+      "publication_sha256": "7fbfb84159194683aa77499ad290a8d781264b0dd6e4dae84f93cb08a01fced4",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/kcsan-strict/gx-offline-v07.ktap",
+      "origin": "goodix-kcsan-qemu-41592466405-1.zip!gx-offline-v07.ktap",
+      "origin_sha256": "f2b3e12c50fef399255e9f5c538a39c165fc08c8e5aa22288e5a18957ee28461",
+      "publication_sha256": "f2b3e12c50fef399255e9f5c538a39c165fc08c8e5aa22288e5a18957ee28461",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/kcsan-strict/gx-source-sha256.json",
+      "origin": "goodix-kcsan-qemu-41592466405-1.zip!gx-source-sha256.json",
+      "origin_sha256": "de2a3a2f4a991071430c288856fd70b2d6bbdefaf0de439489073cf482608ca1",
+      "publication_sha256": "de2a3a2f4a991071430c288856fd70b2d6bbdefaf0de439489073cf482608ca1",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/kcsan-strict/runtime-instrumentation.json",
+      "origin": "goodix-kcsan-qemu-41592466405-1.zip!runtime-instrumentation.json",
+      "origin_sha256": "4fb574b958025b42bd107e9014cbe6689bea2a73bc0baa5d1c5c4f6d144a1563",
+      "publication_sha256": "4fb574b958025b42bd107e9014cbe6689bea2a73bc0baa5d1c5c4f6d144a1563",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/kcsan-strict/status.json",
+      "origin": "goodix-kcsan-qemu-41592466405-1.zip!status.json",
+      "origin_sha256": "b9fda80a2ca6180f9857761c91bb6bf2640403b76ea556c2396b77e3af86777c",
+      "publication_sha256": "b9fda80a2ca6180f9857761c91bb6bf2640403b76ea556c2396b77e3af86777c",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/kcsan-strict/verified-results.json",
+      "origin": "goodix-kcsan-qemu-41592466405-1.zip!verified-results.json",
+      "origin_sha256": "7fbfb84159194683aa77499ad290a8d781264b0dd6e4dae84f93cb08a01fced4",
+      "publication_sha256": "7fbfb84159194683aa77499ad290a8d781264b0dd6e4dae84f93cb08a01fced4",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/lockdep/gx-offline-v07.ktap",
+      "origin": "goodix-uml-lockdep-41587557124-1.zip!gx-offline-v07.ktap",
+      "origin_sha256": "f2b3e12c50fef399255e9f5c538a39c165fc08c8e5aa22288e5a18957ee28461",
+      "publication_sha256": "f2b3e12c50fef399255e9f5c538a39c165fc08c8e5aa22288e5a18957ee28461",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/lockdep/gx-source-sha256.json",
+      "origin": "goodix-uml-lockdep-41587557124-1.zip!gx-source-sha256.json",
+      "origin_sha256": "de2a3a2f4a991071430c288856fd70b2d6bbdefaf0de439489073cf482608ca1",
+      "publication_sha256": "de2a3a2f4a991071430c288856fd70b2d6bbdefaf0de439489073cf482608ca1",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/lockdep/status.json",
+      "origin": "goodix-uml-lockdep-41587557124-1.zip!status.json",
+      "origin_sha256": "e2a9cce955045ac0ee9d9b9acabd5497ef62ff99be58e637f86124cd730f58dc",
+      "publication_sha256": "e2a9cce955045ac0ee9d9b9acabd5497ef62ff99be58e637f86124cd730f58dc",
+      "modified": false
+    },
+    {
+      "destination": "docs/evidence/lockdep/verified-results.json",
+      "origin": "goodix-uml-lockdep-41587557124-1.zip!verified-results.json",
+      "origin_sha256": "7fbfb84159194683aa77499ad290a8d781264b0dd6e4dae84f93cb08a01fced4",
+      "publication_sha256": "7fbfb84159194683aa77499ad290a8d781264b0dd6e4dae84f93cb08a01fced4",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/.gitignore",
+      "origin": "linux/v0.7/.gitignore",
+      "origin_sha256": "83536da7395c9470df57e1df4a312bbc866e169bb696908aac04b3f1fea52c1e",
+      "publication_sha256": "83536da7395c9470df57e1df4a312bbc866e169bb696908aac04b3f1fea52c1e",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/.kunitconfig",
+      "origin": "linux/v0.7/.kunitconfig",
+      "origin_sha256": "47b1e05e2d9d24ed74688c014a9f02733dc3c096f2605c038f0cd34b6af2572a",
+      "publication_sha256": "47b1e05e2d9d24ed74688c014a9f02733dc3c096f2605c038f0cd34b6af2572a",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/Kbuild",
+      "origin": "linux/v0.7/Kbuild",
+      "origin_sha256": "420f6e501cc98bd6bad5586dc9b3d4b1ba55be7df26de17099d73334d1d05c9c",
+      "publication_sha256": "420f6e501cc98bd6bad5586dc9b3d4b1ba55be7df26de17099d73334d1d05c9c",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/Kconfig",
+      "origin": "linux/v0.7/Kconfig",
+      "origin_sha256": "e16c3e0790a9bfcaaaf0b8088a1bb00c7035ed418b0a94f9326b9d1b3957221a",
+      "publication_sha256": "e16c3e0790a9bfcaaaf0b8088a1bb00c7035ed418b0a94f9326b9d1b3957221a",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/Makefile",
+      "origin": "linux/v0.7/Makefile",
+      "origin_sha256": "8f6b5758c198658a729935fdcb9331ffc4c7144304db4d8216879186256dac93",
+      "publication_sha256": "8f6b5758c198658a729935fdcb9331ffc4c7144304db4d8216879186256dac93",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/gx_exchange.c",
+      "origin": "linux/v0.7/gx_exchange.c",
+      "origin_sha256": "7ecc3bdf68354dd0354ad6788f475a85300335da0a2d177ce647f1603a78c879",
+      "publication_sha256": "7ecc3bdf68354dd0354ad6788f475a85300335da0a2d177ce647f1603a78c879",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/gx_kunit.c",
+      "origin": "linux/v0.7/gx_kunit.c",
+      "origin_sha256": "33fc5d75f592f0f9449bbd172c0cae19966008b9a7b6dabd9ad83a34545aaf15",
+      "publication_sha256": "33fc5d75f592f0f9449bbd172c0cae19966008b9a7b6dabd9ad83a34545aaf15",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/gx_offline.h",
+      "origin": "linux/v0.7/gx_offline.h",
+      "origin_sha256": "e8a5d18b3a289322345b42760cffdadefbc1a2cd1745a17f04875e6bf6076abe",
+      "publication_sha256": "e8a5d18b3a289322345b42760cffdadefbc1a2cd1745a17f04875e6bf6076abe",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/gx_protocol_core.c",
+      "origin": "linux/v0.7/gx_protocol_core.c",
+      "origin_sha256": "31e70688b04c4eb055a87f2a87864c7ef79d95d69447cdd823ca385f7e56314b",
+      "publication_sha256": "31e70688b04c4eb055a87f2a87864c7ef79d95d69447cdd823ca385f7e56314b",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/gx_protocol_core.h",
+      "origin": "linux/v0.7/gx_protocol_core.h",
+      "origin_sha256": "8a85af4109dd7c971f401b952177460b28fe501412b94083fa63de0be93030aa",
+      "publication_sha256": "8a85af4109dd7c971f401b952177460b28fe501412b94083fa63de0be93030aa",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/gx_rx_staging.c",
+      "origin": "linux/v0.7/gx_rx_staging.c",
+      "origin_sha256": "bc28a29414c468f02744d90660c0f069236d073649bf3b64c9cd677e73d80925",
+      "publication_sha256": "bc28a29414c468f02744d90660c0f069236d073649bf3b64c9cd677e73d80925",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/gx_test_event_source.c",
+      "origin": "linux/v0.7/gx_test_event_source.c",
+      "origin_sha256": "c5ea64171163e1f5d7030b498a69dcadf1ddd3bf3faa50de2c2cbcfaf904de99",
+      "publication_sha256": "c5ea64171163e1f5d7030b498a69dcadf1ddd3bf3faa50de2c2cbcfaf904de99",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/gx_transport_disabled.c",
+      "origin": "linux/v0.7/gx_transport_disabled.c",
+      "origin_sha256": "75b65e6d5dffb6b3609edc03e49b49f0025cfab3afd3a1af13b526afe4733bba",
+      "publication_sha256": "75b65e6d5dffb6b3609edc03e49b49f0025cfab3afd3a1af13b526afe4733bba",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/provenance.json",
+      "origin": "linux/v0.7/provenance.json",
+      "origin_sha256": "18a5852c89153c2aaa5a94d2562c84cdee3bfd4a12d47675b7cd3c2267ff272e",
+      "publication_sha256": "18a5852c89153c2aaa5a94d2562c84cdee3bfd4a12d47675b7cd3c2267ff272e",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/tests/fixtures.h",
+      "origin": "linux/v0.7/tests/fixtures.h",
+      "origin_sha256": "b4bca81985190ae22d4269ae4c7d5b9fe8cf3728b7b18cfef0d5e7f63cdccb0e",
+      "publication_sha256": "b4bca81985190ae22d4269ae4c7d5b9fe8cf3728b7b18cfef0d5e7f63cdccb0e",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/tools/audit-offline.py",
+      "origin": "linux/v0.7/tools/audit-offline.py",
+      "origin_sha256": "1b59a48dc5d62514bad160fa168cf0f72b1935b727f5d2f4082e62db7959cf15",
+      "publication_sha256": "1b59a48dc5d62514bad160fa168cf0f72b1935b727f5d2f4082e62db7959cf15",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/tools/build-offline.sh",
+      "origin": "linux/v0.7/tools/build-offline.sh",
+      "origin_sha256": "235448e37ec9fc138647c49bb4882ae767bf96323f5e9657857f42ed1f5bfee2",
+      "publication_sha256": "235448e37ec9fc138647c49bb4882ae767bf96323f5e9657857f42ed1f5bfee2",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/tools/check-protocol-parity.py",
+      "origin": "linux/v0.7/tools/check-protocol-parity.py",
+      "origin_sha256": "11f3cf6e940450db6f5395bdd9db01468067736039af2d4ad86f44b689985375",
+      "publication_sha256": "11f3cf6e940450db6f5395bdd9db01468067736039af2d4ad86f44b689985375",
+      "modified": false
+    },
+    {
+      "destination": "historical/linux/v0.7/tools/run-kunit-uml.sh",
+      "origin": "linux/v0.7/tools/run-kunit-uml.sh",
+      "origin_sha256": "87a99a18cd7ec9e13909b56f50e5f5f66495360f65939512297516f4f468328f",
+      "publication_sha256": "87a99a18cd7ec9e13909b56f50e5f5f66495360f65939512297516f4f468328f",
+      "modified": false
+    },
+    {
+      "destination": "historical/passivo/Goodix_GXFP5A8B/Makefile",
+      "origin": "linux/Goodix_GXFP5A8B_driver_passivo.zip!Goodix_GXFP5A8B/Makefile",
+      "origin_sha256": "edebf14e6c49407cd67a79583f593d72f50ceb641627fe91b7676282a30f1c40",
+      "publication_sha256": "edebf14e6c49407cd67a79583f593d72f50ceb641627fe91b7676282a30f1c40",
+      "modified": false
+    },
+    {
+      "destination": "historical/passivo/Goodix_GXFP5A8B/README.md",
+      "origin": "linux/Goodix_GXFP5A8B_driver_passivo.zip!Goodix_GXFP5A8B/README.md",
+      "origin_sha256": "69002f92febef7a99cb472bf76865cd6070a532a4bdc84f7956020dfe19d7b89",
+      "publication_sha256": "69002f92febef7a99cb472bf76865cd6070a532a4bdc84f7956020dfe19d7b89",
+      "modified": false
+    },
+    {
+      "destination": "historical/passivo/Goodix_GXFP5A8B/gxfp5a8b_probe.c",
+      "origin": "linux/Goodix_GXFP5A8B_driver_passivo.zip!Goodix_GXFP5A8B/gxfp5a8b_probe.c",
+      "origin_sha256": "500661905a24a6e13fb303d0a623071933d9f66e0cac0f5a7b87037ed79d84b8",
+      "publication_sha256": "500661905a24a6e13fb303d0a623071933d9f66e0cac0f5a7b87037ed79d84b8",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.2/Makefile",
+      "origin": "linux/gxfp5a8b_acpi_probe_v02.zip!Makefile",
+      "origin_sha256": "edebf14e6c49407cd67a79583f593d72f50ceb641627fe91b7676282a30f1c40",
+      "publication_sha256": "edebf14e6c49407cd67a79583f593d72f50ceb641627fe91b7676282a30f1c40",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.2/README.md",
+      "origin": "linux/gxfp5a8b_acpi_probe_v02.zip!README.md",
+      "origin_sha256": "4d2eae91838fa13a2741baffdbf7aabc0f62af3c2c03ed7a65db1513281341b3",
+      "publication_sha256": "4d2eae91838fa13a2741baffdbf7aabc0f62af3c2c03ed7a65db1513281341b3",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.2/gxfp5a8b_probe.c",
+      "origin": "linux/gxfp5a8b_acpi_probe_v02.zip!gxfp5a8b_probe.c",
+      "origin_sha256": "80da87cc36faa4174600355c58b1cf18662f75de9f297cb285c1ac7c8e77df13",
+      "publication_sha256": "80da87cc36faa4174600355c58b1cf18662f75de9f297cb285c1ac7c8e77df13",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.3/Goodix_GXFP5A8B_v03/Makefile",
+      "origin": "linux/Goodix_GXFP5A8B_probe_v03.zip!Goodix_GXFP5A8B_v03/Makefile",
+      "origin_sha256": "d9b4246438908ccb96a53ac1eb2ae87caeb94a73e0676c582a075f5994cef8f7",
+      "publication_sha256": "d9b4246438908ccb96a53ac1eb2ae87caeb94a73e0676c582a075f5994cef8f7",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.3/Goodix_GXFP5A8B_v03/README.md",
+      "origin": "linux/Goodix_GXFP5A8B_probe_v03.zip!Goodix_GXFP5A8B_v03/README.md",
+      "origin_sha256": "ea7efccc46874dbe8890cdb3f5d50eac380ca6a5e5fa916a92360b3b06e44bde",
+      "publication_sha256": "ea7efccc46874dbe8890cdb3f5d50eac380ca6a5e5fa916a92360b3b06e44bde",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.3/Goodix_GXFP5A8B_v03/gxfp5a8b_probe.c",
+      "origin": "linux/Goodix_GXFP5A8B_probe_v03.zip!Goodix_GXFP5A8B_v03/gxfp5a8b_probe.c",
+      "origin_sha256": "01cd4e3a5e90d84745a524b15b37bd6933704a9ed558d8e4564edfbbe2e0f9ca",
+      "publication_sha256": "01cd4e3a5e90d84745a524b15b37bd6933704a9ed558d8e4564edfbbe2e0f9ca",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.4/Goodix_GXFP5A8B_v04/Makefile",
+      "origin": "linux/GXFP5A8B_v04_corrigido.zip!Goodix_GXFP5A8B_v04/Makefile",
+      "origin_sha256": "d9b4246438908ccb96a53ac1eb2ae87caeb94a73e0676c582a075f5994cef8f7",
+      "publication_sha256": "d9b4246438908ccb96a53ac1eb2ae87caeb94a73e0676c582a075f5994cef8f7",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.4/Goodix_GXFP5A8B_v04/README.md",
+      "origin": "linux/GXFP5A8B_v04_corrigido.zip!Goodix_GXFP5A8B_v04/README.md",
+      "origin_sha256": "838a986e459e3ba7f10c485796e2e51baca837b2fb45b377955e012c70c9717e",
+      "publication_sha256": "838a986e459e3ba7f10c485796e2e51baca837b2fb45b377955e012c70c9717e",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.4/Goodix_GXFP5A8B_v04/gxfp5a8b_probe.c",
+      "origin": "linux/GXFP5A8B_v04_corrigido.zip!Goodix_GXFP5A8B_v04/gxfp5a8b_probe.c",
+      "origin_sha256": "aad7926a4e6cb341dfb5ce2f450c2b3def529591d9eea2a639ad7e12bbd03efc",
+      "publication_sha256": "aad7926a4e6cb341dfb5ce2f450c2b3def529591d9eea2a639ad7e12bbd03efc",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.4/Goodix_GXFP5A8B_v04/test_frames_offline.py",
+      "origin": "linux/GXFP5A8B_v04_corrigido.zip!Goodix_GXFP5A8B_v04/test_frames_offline.py",
+      "origin_sha256": "646756b093237a191664fca57e2ff12507d1906ec435a617adc1cb3e23a1a6e5",
+      "publication_sha256": "646756b093237a191664fca57e2ff12507d1906ec435a617adc1cb3e23a1a6e5",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.5/Goodix_GXFP5A8B_v05/Makefile",
+      "origin": "linux/GXFP5A8B_v05_E5_cpu_diagnostico.zip!Goodix_GXFP5A8B_v05/Makefile",
+      "origin_sha256": "d9b4246438908ccb96a53ac1eb2ae87caeb94a73e0676c582a075f5994cef8f7",
+      "publication_sha256": "d9b4246438908ccb96a53ac1eb2ae87caeb94a73e0676c582a075f5994cef8f7",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.5/Goodix_GXFP5A8B_v05/README.md",
+      "origin": "linux/GXFP5A8B_v05_E5_cpu_diagnostico.zip!Goodix_GXFP5A8B_v05/README.md",
+      "origin_sha256": "025ebc6652c1c553ff27d40c6297e2494ee1df8b232d124767fc08fbc2772bc6",
+      "publication_sha256": "025ebc6652c1c553ff27d40c6297e2494ee1df8b232d124767fc08fbc2772bc6",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.5/Goodix_GXFP5A8B_v05/gxfp5a8b_probe.c",
+      "origin": "linux/GXFP5A8B_v05_E5_cpu_diagnostico.zip!Goodix_GXFP5A8B_v05/gxfp5a8b_probe.c",
+      "origin_sha256": "ba60d2cb88ccf8d5464b2af19c4a3746a0c5e83367ccab6984d7766a609f7d20",
+      "publication_sha256": "ba60d2cb88ccf8d5464b2af19c4a3746a0c5e83367ccab6984d7766a609f7d20",
+      "modified": false
+    },
+    {
+      "destination": "historical/v0.5/Goodix_GXFP5A8B_v05/test_frames_offline.py",
+      "origin": "linux/GXFP5A8B_v05_E5_cpu_diagnostico.zip!Goodix_GXFP5A8B_v05/test_frames_offline.py",
+      "origin_sha256": "883a061d515647eec15d16b3e4c721424f31f959be50ebafc9583520eb0cac0a",
+      "publication_sha256": "883a061d515647eec15d16b3e4c721424f31f959be50ebafc9583520eb0cac0a",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/.gitignore",
+      "origin": "linux/v0.7-validation/.gitignore",
+      "origin_sha256": "83536da7395c9470df57e1df4a312bbc866e169bb696908aac04b3f1fea52c1e",
+      "publication_sha256": "83536da7395c9470df57e1df4a312bbc866e169bb696908aac04b3f1fea52c1e",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/.kunitconfig",
+      "origin": "linux/v0.7-validation/.kunitconfig",
+      "origin_sha256": "47b1e05e2d9d24ed74688c014a9f02733dc3c096f2605c038f0cd34b6af2572a",
+      "publication_sha256": "47b1e05e2d9d24ed74688c014a9f02733dc3c096f2605c038f0cd34b6af2572a",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/.kunitconfig.kasan",
+      "origin": "linux/v0.7-validation/.kunitconfig.kasan",
+      "origin_sha256": "c17e91ce3cd9ad19afabb6c4a261d577c856aa5078705f65010d644e377fae0c",
+      "publication_sha256": "c17e91ce3cd9ad19afabb6c4a261d577c856aa5078705f65010d644e377fae0c",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/.kunitconfig.kcsan",
+      "origin": "linux/v0.7-validation/.kunitconfig.kcsan",
+      "origin_sha256": "7ec7603a9d2fadcc0b46a72f68e0c75ad2bb8ecb8289b91e6bfe5da826695611",
+      "publication_sha256": "7ec7603a9d2fadcc0b46a72f68e0c75ad2bb8ecb8289b91e6bfe5da826695611",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/Kbuild",
+      "origin": "linux/v0.7-validation/Kbuild",
+      "origin_sha256": "420f6e501cc98bd6bad5586dc9b3d4b1ba55be7df26de17099d73334d1d05c9c",
+      "publication_sha256": "420f6e501cc98bd6bad5586dc9b3d4b1ba55be7df26de17099d73334d1d05c9c",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/Kconfig",
+      "origin": "linux/v0.7-validation/Kconfig",
+      "origin_sha256": "e16c3e0790a9bfcaaaf0b8088a1bb00c7035ed418b0a94f9326b9d1b3957221a",
+      "publication_sha256": "e16c3e0790a9bfcaaaf0b8088a1bb00c7035ed418b0a94f9326b9d1b3957221a",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/Makefile",
+      "origin": "linux/v0.7-validation/Makefile",
+      "origin_sha256": "8f6b5758c198658a729935fdcb9331ffc4c7144304db4d8216879186256dac93",
+      "publication_sha256": "8f6b5758c198658a729935fdcb9331ffc4c7144304db4d8216879186256dac93",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/gx_exchange.c",
+      "origin": "linux/v0.7-validation/gx_exchange.c",
+      "origin_sha256": "7ecc3bdf68354dd0354ad6788f475a85300335da0a2d177ce647f1603a78c879",
+      "publication_sha256": "7ecc3bdf68354dd0354ad6788f475a85300335da0a2d177ce647f1603a78c879",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/gx_kunit.c",
+      "origin": "linux/v0.7-validation/gx_kunit.c",
+      "origin_sha256": "33fc5d75f592f0f9449bbd172c0cae19966008b9a7b6dabd9ad83a34545aaf15",
+      "publication_sha256": "33fc5d75f592f0f9449bbd172c0cae19966008b9a7b6dabd9ad83a34545aaf15",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/gx_offline.h",
+      "origin": "linux/v0.7-validation/gx_offline.h",
+      "origin_sha256": "e8a5d18b3a289322345b42760cffdadefbc1a2cd1745a17f04875e6bf6076abe",
+      "publication_sha256": "e8a5d18b3a289322345b42760cffdadefbc1a2cd1745a17f04875e6bf6076abe",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/gx_protocol_core.c",
+      "origin": "linux/v0.7-validation/gx_protocol_core.c",
+      "origin_sha256": "31e70688b04c4eb055a87f2a87864c7ef79d95d69447cdd823ca385f7e56314b",
+      "publication_sha256": "31e70688b04c4eb055a87f2a87864c7ef79d95d69447cdd823ca385f7e56314b",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/gx_protocol_core.h",
+      "origin": "linux/v0.7-validation/gx_protocol_core.h",
+      "origin_sha256": "8a85af4109dd7c971f401b952177460b28fe501412b94083fa63de0be93030aa",
+      "publication_sha256": "8a85af4109dd7c971f401b952177460b28fe501412b94083fa63de0be93030aa",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/gx_rx_staging.c",
+      "origin": "linux/v0.7-validation/gx_rx_staging.c",
+      "origin_sha256": "bc28a29414c468f02744d90660c0f069236d073649bf3b64c9cd677e73d80925",
+      "publication_sha256": "bc28a29414c468f02744d90660c0f069236d073649bf3b64c9cd677e73d80925",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/gx_test_event_source.c",
+      "origin": "linux/v0.7-validation/gx_test_event_source.c",
+      "origin_sha256": "c5ea64171163e1f5d7030b498a69dcadf1ddd3bf3faa50de2c2cbcfaf904de99",
+      "publication_sha256": "c5ea64171163e1f5d7030b498a69dcadf1ddd3bf3faa50de2c2cbcfaf904de99",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/gx_transport_disabled.c",
+      "origin": "linux/v0.7-validation/gx_transport_disabled.c",
+      "origin_sha256": "75b65e6d5dffb6b3609edc03e49b49f0025cfab3afd3a1af13b526afe4733bba",
+      "publication_sha256": "75b65e6d5dffb6b3609edc03e49b49f0025cfab3afd3a1af13b526afe4733bba",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/provenance.json",
+      "origin": "linux/v0.7-validation/provenance.json",
+      "origin_sha256": "18a5852c89153c2aaa5a94d2562c84cdee3bfd4a12d47675b7cd3c2267ff272e",
+      "publication_sha256": "18a5852c89153c2aaa5a94d2562c84cdee3bfd4a12d47675b7cd3c2267ff272e",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/tests/fixtures.h",
+      "origin": "linux/v0.7-validation/tests/fixtures.h",
+      "origin_sha256": "b4bca81985190ae22d4269ae4c7d5b9fe8cf3728b7b18cfef0d5e7f63cdccb0e",
+      "publication_sha256": "b4bca81985190ae22d4269ae4c7d5b9fe8cf3728b7b18cfef0d5e7f63cdccb0e",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/tools/audit-offline.py",
+      "origin": "linux/v0.7-validation/tools/audit-offline.py",
+      "origin_sha256": "1b59a48dc5d62514bad160fa168cf0f72b1935b727f5d2f4082e62db7959cf15",
+      "publication_sha256": "1b59a48dc5d62514bad160fa168cf0f72b1935b727f5d2f4082e62db7959cf15",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/tools/build-offline.sh",
+      "origin": "linux/v0.7-validation/tools/build-offline.sh",
+      "origin_sha256": "235448e37ec9fc138647c49bb4882ae767bf96323f5e9657857f42ed1f5bfee2",
+      "publication_sha256": "235448e37ec9fc138647c49bb4882ae767bf96323f5e9657857f42ed1f5bfee2",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/tools/check-protocol-parity.py",
+      "origin": "linux/v0.7-validation/tools/check-protocol-parity.py",
+      "origin_sha256": "11f3cf6e940450db6f5395bdd9db01468067736039af2d4ad86f44b689985375",
+      "publication_sha256": "23b75440dfafeb0bd037c9d84e98e75e4fd0be5c217c9633a6c78ffa6f8d3e44",
+      "modified": true
+    },
+    {
+      "destination": "research/offline-kunit/tools/run-kunit-uml.sh",
+      "origin": "linux/v0.7-validation/tools/run-kunit-uml.sh",
+      "origin_sha256": "30ded808b5b3b09ccb96f727db592412c34e0d20327835ba3bcc44745e3bfade",
+      "publication_sha256": "30ded808b5b3b09ccb96f727db592412c34e0d20327835ba3bcc44745e3bfade",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-kunit/tools/verify-kunit-log.py",
+      "origin": "linux/v0.7-validation/tools/verify-kunit-log.py",
+      "origin_sha256": "1af81792f59f0cc9c22ad3c0e48603b818a193090a8544bd79cecaac32921188",
+      "publication_sha256": "1af81792f59f0cc9c22ad3c0e48603b818a193090a8544bd79cecaac32921188",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-mcu/.gitignore",
+      "origin": "linux/v0.6/.gitignore",
+      "origin_sha256": "99921edb369e12a35a87d768ae481f8c944573626abd4b8f3a1fe78846f30ba7",
+      "publication_sha256": "99921edb369e12a35a87d768ae481f8c944573626abd4b8f3a1fe78846f30ba7",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-mcu/Makefile",
+      "origin": "linux/v0.6/Makefile",
+      "origin_sha256": "02c16a32b4bda506d2a3463c4234c80bc7c0e18777153596bdc560de6f9c6345",
+      "publication_sha256": "02c16a32b4bda506d2a3463c4234c80bc7c0e18777153596bdc560de6f9c6345",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-mcu/fixtures/baseline-v05-review.json",
+      "origin": "linux/v0.6/fixtures/baseline-v05-review.json",
+      "origin_sha256": "19ce593aeaa63dd0397b36e150c75161bb925be3161fe8246da3ca2a100fba01",
+      "publication_sha256": "19ce593aeaa63dd0397b36e150c75161bb925be3161fe8246da3ca2a100fba01",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-mcu/fixtures/windows-a8.json",
+      "origin": "linux/v0.6/fixtures/windows-a8.json",
+      "origin_sha256": "e8728ba62bf35cf4cd22a941b1f8d960414677c3a2ae6ec0891606bcd7138582",
+      "publication_sha256": "e8728ba62bf35cf4cd22a941b1f8d960414677c3a2ae6ec0891606bcd7138582",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-mcu/include/goodix_protocol.h",
+      "origin": "linux/v0.6/include/goodix_protocol.h",
+      "origin_sha256": "147f7fc467da45f3c2bb005999832e4a97205920dcaf893377425371adfb1544",
+      "publication_sha256": "147f7fc467da45f3c2bb005999832e4a97205920dcaf893377425371adfb1544",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-mcu/src/goodix_protocol.c",
+      "origin": "linux/v0.6/src/goodix_protocol.c",
+      "origin_sha256": "ca62c81dbd6c7df81f84430e343e0ddd4fa4245662192483363d3f553e908e79",
+      "publication_sha256": "ca62c81dbd6c7df81f84430e343e0ddd4fa4245662192483363d3f553e908e79",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-mcu/tests/test_protocol.c",
+      "origin": "linux/v0.6/tests/test_protocol.c",
+      "origin_sha256": "244bf45ec1fac9ac8e6cc6c0b8a32e226a162182ebb0769cf83fbfe699c5a883",
+      "publication_sha256": "244bf45ec1fac9ac8e6cc6c0b8a32e226a162182ebb0769cf83fbfe699c5a883",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-mcu/tools/audit_offline.py",
+      "origin": "linux/v0.6/tools/audit_offline.py",
+      "origin_sha256": "f3d7a7cfbdacb1ec051e8dcff1ee7142bd229c4b43c0558a0ec27cded308bedc",
+      "publication_sha256": "f3d7a7cfbdacb1ec051e8dcff1ee7142bd229c4b43c0558a0ec27cded308bedc",
+      "modified": false
+    },
+    {
+      "destination": "research/offline-mcu/tools/fixtures_header.py",
+      "origin": "linux/v0.6/tools/fixtures_header.py",
+      "origin_sha256": "298d04d9fd4ab2e3c51df22c2e9def5cb10a48e17aa53e20febcf65bab36b216",
+      "publication_sha256": "298d04d9fd4ab2e3c51df22c2e9def5cb10a48e17aa53e20febcf65bab36b216",
+      "modified": false
+    },
+    {
+      "destination": "src/README.md",
+      "origin": "linux/v0.3-offline/README.md",
+      "origin_sha256": "020b30c18482df1ea9a1c108917c4cee3ee248a673b5d24f78f820ae46f8535a",
+      "publication_sha256": "cafd302f61b722591643c225907276237f2cd04ba894bd05049beda9d54d52cf",
+      "modified": true
+    },
+    {
+      "destination": "src/diagnostic.py",
+      "origin": "linux/v0.3-offline/diagnostic.py",
+      "origin_sha256": "87ff69e98686f1bcef924f029a0346fe6238a1e14edcf168f82e7eec0894861a",
+      "publication_sha256": "87ff69e98686f1bcef924f029a0346fe6238a1e14edcf168f82e7eec0894861a",
+      "modified": false
+    },
+    {
+      "destination": "src/simulated.py",
+      "origin": "linux/v0.3-offline/simulated.py",
+      "origin_sha256": "37938721c6a96efe4ad2180060a0dffa0d97362e876fe52249bf1f93985de7d1",
+      "publication_sha256": "37938721c6a96efe4ad2180060a0dffa0d97362e876fe52249bf1f93985de7d1",
+      "modified": false
+    },
+    {
+      "destination": "src/transport.py",
+      "origin": "linux/v0.3-offline/transport.py",
+      "origin_sha256": "1765eff9b2396fb8b751945be89f11b74b61c1a1d75299588002669a1e5b8cda",
+      "publication_sha256": "1765eff9b2396fb8b751945be89f11b74b61c1a1d75299588002669a1e5b8cda",
+      "modified": false
+    },
+    {
+      "destination": "tests/support/linux-readonly-checks.sh",
+      "origin": "linux-readonly-checks.sh",
+      "origin_sha256": "8ecc99e1af1af2855e043775fc1dcf6c9e13948a9990a8da6bb1dbeb4fa49899",
+      "publication_sha256": "8ecc99e1af1af2855e043775fc1dcf6c9e13948a9990a8da6bb1dbeb4fa49899",
+      "modified": false
+    },
+    {
+      "destination": "tests/test_diagnostic.py",
+      "origin": "linux/v0.3-offline/test_diagnostic.py",
+      "origin_sha256": "884ae7fd8008679c79991de72ba7deb74f7acc681cd570a695c4b93414de6865",
+      "publication_sha256": "fbef14f523a7dacdbd3991b126ef8db86b1744186c2737a2e8382903596133d5",
+      "modified": true
+    },
+    {
+      "destination": "tests/test_linux_readonly_checks.py",
+      "origin": "tests/test_linux_readonly_checks.py",
+      "origin_sha256": "de57dfbea63811b8016d269ac2987ac848cb393359d57d1dfe84a8aec0443297",
+      "publication_sha256": "286487e0348a1011e470d6745d62c89405d886476667e66e5594baf86647a468",
+      "modified": true
+    }
+  ],
+  "source_archives": [
+    {
+      "origin": "linux/Goodix_GXFP5A8B_driver_passivo.zip",
+      "sha256": "10b29fd04c587b3ca3b805fd77f3322c0ddee66a1f1ab23120710852a2470e61"
+    },
+    {
+      "origin": "linux/gxfp5a8b_acpi_probe_v02.zip",
+      "sha256": "7e3c1f7000c0b7d3db0f311a818776ebaddd4e4b918b060c0906fce7d5bdb984"
+    },
+    {
+      "origin": "linux/Goodix_GXFP5A8B_probe_v03.zip",
+      "sha256": "e1277bf39692f54181f8c64afe8ed734a9b030f39ce24f0eb9dd53609199e45b"
+    },
+    {
+      "origin": "linux/GXFP5A8B_v04_corrigido.zip",
+      "sha256": "af4887dab6206ce184522b361de47a5662195e26c000ac2d8937f5b5ef9302e3"
+    },
+    {
+      "origin": "linux/GXFP5A8B_v05_E5_cpu_diagnostico.zip",
+      "sha256": "4e9154dd3352d27486e0453b4f80002c994253c98c03a267cd2928353d1cb08f"
+    },
+    {
+      "origin": "goodix-uml-basic-41587557124-1.zip",
+      "sha256": "eff1fe098b0256f6acc2b7cfd03d8fd7ab5f2b445001b0dc209625e40154d2cb"
+    },
+    {
+      "origin": "goodix-uml-lockdep-41587557124-1.zip",
+      "sha256": "fc379aa8a02ba524f4ca385fa43df3aa21ffb63dfe4dea6ef8dcab77c3d6fad1"
+    },
+    {
+      "origin": "goodix-uml-kasan-41587557124-1.zip",
+      "sha256": "154bf2521f642ae7be9659651aaf0d3b42014a2319030e6a039bfbe0d24bfe2f"
+    },
+    {
+      "origin": "goodix-kcsan-qemu-41592466405-1.zip",
+      "sha256": "1ca2a0993025f8a039cdfd2c7313cecf42a4b0e0a711e0eb7a44567ff475302d"
+    }
+  ]
+}

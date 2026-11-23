@@ -1,0 +1,13 @@
+{
+  "archive": "linux/GXFP5A8B_v05_E5_cpu_diagnostico.zip",
+  "archive_sha256": "4e9154dd3352d27486e0453b4f80002c994253c98c03a267cd2928353d1cb08f",
+  "source_member": "Goodix_GXFP5A8B_v05/gxfp5a8b_probe.c",
+  "source_sha256": "ba60d2cb88ccf8d5464b2af19c4a3746a0c5e83367ccab6984d7766a609f7d20",
+  "review_scope": "Offline source inspection only; no extraction or execution of module",
+  "active_interfaces_in_v05": [
+    "allow_cpu_read -> cpu_version",
+    "allow_wakeup_cpu_read -> wakeup_cpu_version",
+    "observe_irq -> devm_request_irq"
+  ],
+  "v06_policy": "No hardware backend, kernel driver registration, sysfs hardware attributes or module parameters"
+}

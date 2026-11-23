@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-only
+obj-$(CONFIG_GX_OFFLINE_KUNIT_TEST) += gx_offline_test.o
+gx_offline_test-y := gx_protocol_core.o gx_exchange.o gx_rx_staging.o \
+	gx_test_event_source.o gx_transport_disabled.o gx_kunit.o

@@ -1,0 +1,117 @@
+name: Goodix v0.7 offline KUnit UML
+on:
+  workflow_dispatch:
+    inputs:
+      debug_profiles:
+        description: 'After basic success, attempt separate lockdep, KASAN and KCSAN jobs; unavailable options fail explicitly'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+defaults:
+  run:
+    shell: bash
+jobs:
+  basic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      PROFILE: basic
+      RUN_ROOT: ${{ runner.temp }}/goodix-basic
+      EVIDENCE: ${{ runner.temp }}/goodix-basic/evidence
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Record hosted runner and validate CI helpers
+        run: |
+          mkdir -p "$EVIDENCE"
+          uname -a > "$EVIDENCE/runner.log"
+          cat /etc/os-release >> "$EVIDENCE/runner.log"
+          python3 -m unittest discover -s ci/goodix/tests -v 2>&1 | tee "$EVIDENCE/helper-tests.log"
+      - name: Install UML build dependencies on hosted runner
+        run: |
+          sudo apt-get update 2>&1 | tee "$EVIDENCE/apt-update.log"
+          sudo apt-get install --no-install-recommends -y build-essential gcc make binutils git flex bison bc libelf-dev libssl-dev libncurses-dev libcap-dev python3 perl pkg-config rsync file 2>&1 | tee "$EVIDENCE/dependency-install.log"
+          gcc --version > "$EVIDENCE/toolchain.log"
+          ld --version >> "$EVIDENCE/toolchain.log"
+          python3 --version >> "$EVIDENCE/toolchain.log"
+          dpkg-query -W build-essential gcc make binutils git flex bison bc libelf-dev libssl-dev libncurses-dev libcap-dev python3 perl pkg-config rsync file >> "$EVIDENCE/toolchain.log"
+      - name: Fetch fixed Linux revision
+        run: |
+          timeout --kill-after=10s 10m bash ci/goodix/fetch-kernel.sh "$RUN_ROOT/kernel" 2>&1 | tee "$EVIDENCE/kernel-fetch.log"
+      - name: Configure, build, execute and verify UML
+        run: |
+          python3 ci/goodix/run.py --profile "$PROFILE" --kernel "$RUN_ROOT/kernel" --source "$GITHUB_WORKSPACE/research/offline-kunit" --work "$RUN_ROOT/work" --artifacts "$EVIDENCE"
+      - name: Finalize evidence even on failure
+        if: always()
+        run: |
+          mkdir -p "$EVIDENCE"
+          if test -f ci/goodix/finalize.py; then
+            python3 ci/goodix/finalize.py "$EVIDENCE"
+          else
+            printf '%s\n' 'Checkout failed; no KUnit execution verified.' > "$EVIDENCE/collection-error.log"
+          fi
+      - name: Upload logs and configuration even on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: goodix-uml-${{ env.PROFILE }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.EVIDENCE }}
+          if-no-files-found: error
+          retention-days: 30
+  debug:
+    needs: basic
+    if: ${{ inputs.debug_profiles }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        profile: [lockdep, kasan]
+    env:
+      PROFILE: ${{ matrix.profile }}
+      RUN_ROOT: ${{ runner.temp }}/goodix-${{ matrix.profile }}
+      EVIDENCE: ${{ runner.temp }}/goodix-${{ matrix.profile }}/evidence
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Record hosted runner and validate CI helpers
+        run: |
+          mkdir -p "$EVIDENCE"
+          uname -a > "$EVIDENCE/runner.log"
+          cat /etc/os-release >> "$EVIDENCE/runner.log"
+          python3 -m unittest discover -s ci/goodix/tests -v 2>&1 | tee "$EVIDENCE/helper-tests.log"
+      - name: Install UML build dependencies on hosted runner
+        run: |
+          sudo apt-get update 2>&1 | tee "$EVIDENCE/apt-update.log"
+          sudo apt-get install --no-install-recommends -y build-essential gcc make binutils git flex bison bc libelf-dev libssl-dev libncurses-dev libcap-dev python3 perl pkg-config rsync file 2>&1 | tee "$EVIDENCE/dependency-install.log"
+          gcc --version > "$EVIDENCE/toolchain.log"
+          ld --version >> "$EVIDENCE/toolchain.log"
+          python3 --version >> "$EVIDENCE/toolchain.log"
+          dpkg-query -W build-essential gcc make binutils git flex bison bc libelf-dev libssl-dev libncurses-dev libcap-dev python3 perl pkg-config rsync file >> "$EVIDENCE/toolchain.log"
+      - name: Fetch fixed Linux revision
+        run: |
+          timeout --kill-after=10s 10m bash ci/goodix/fetch-kernel.sh "$RUN_ROOT/kernel" 2>&1 | tee "$EVIDENCE/kernel-fetch.log"
+      - name: Configure, build, execute and verify UML
+        run: |
+          python3 ci/goodix/run.py --profile "$PROFILE" --kernel "$RUN_ROOT/kernel" --source "$GITHUB_WORKSPACE/research/offline-kunit" --work "$RUN_ROOT/work" --artifacts "$EVIDENCE"
+      - name: Finalize evidence even on failure
+        if: always()
+        run: |
+          mkdir -p "$EVIDENCE"
+          if test -f ci/goodix/finalize.py; then
+            python3 ci/goodix/finalize.py "$EVIDENCE"
+          else
+            printf '%s\n' 'Checkout failed; no KUnit execution verified.' > "$EVIDENCE/collection-error.log"
+          fi
+      - name: Upload logs and configuration even on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: goodix-uml-${{ env.PROFILE }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ env.EVIDENCE }}
+          if-no-files-found: error
+          retention-days: 30
