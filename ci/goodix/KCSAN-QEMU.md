@@ -116,5 +116,4 @@ python3 -m unittest discover -s ci/goodix/tests -v
 ```
 
 Os dados de boot e KTAP nesses testes são **fixtures sintéticas**. Não representam
-um resultado KCSAN/QEMU real. Consulte `v07-kcsan-qemu-validation-report.md` para
-o estado da validação entregue.
+um resultado KCSAN/QEMU real. Consulte as [evidências históricas do KCSAN Strict](../../docs/evidence/README.md#evidência-kunit-histórica).

@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       debug_profiles:
-        description: 'After basic success, attempt separate lockdep, KASAN and KCSAN jobs; unavailable options fail explicitly'
+        description: 'After basic success, attempt separate lockdep and KASAN jobs; unavailable options fail explicitly'
         type: boolean
         default: false
 permissions:
@@ -17,9 +17,11 @@ jobs:
     timeout-minutes: 90
     env:
       PROFILE: basic
-      RUN_ROOT: ${{ runner.temp }}/goodix-basic
-      EVIDENCE: ${{ runner.temp }}/goodix-basic/evidence
     steps:
+      - name: Set temporary paths
+        run: |
+          run_root="$RUNNER_TEMP/goodix-basic"
+          printf 'RUN_ROOT=%s\nEVIDENCE=%s\n' "$run_root" "$run_root/evidence" >> "$GITHUB_ENV"
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
@@ -72,9 +74,11 @@ jobs:
         profile: [lockdep, kasan]
     env:
       PROFILE: ${{ matrix.profile }}
-      RUN_ROOT: ${{ runner.temp }}/goodix-${{ matrix.profile }}
-      EVIDENCE: ${{ runner.temp }}/goodix-${{ matrix.profile }}/evidence
     steps:
+      - name: Set temporary paths
+        run: |
+          run_root="$RUNNER_TEMP/goodix-$PROFILE"
+          printf 'RUN_ROOT=%s\nEVIDENCE=%s\n' "$run_root" "$run_root/evidence" >> "$GITHUB_ENV"
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false

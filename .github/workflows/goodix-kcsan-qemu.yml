@@ -10,10 +10,11 @@ jobs:
   kcsan-qemu:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
-    env:
-      RUN_ROOT: ${{ runner.temp }}/goodix-kcsan-qemu
-      EVIDENCE: ${{ runner.temp }}/goodix-kcsan-qemu/evidence
     steps:
+      - name: Set temporary paths
+        run: |
+          run_root="$RUNNER_TEMP/goodix-kcsan-qemu"
+          printf 'RUN_ROOT=%s\nEVIDENCE=%s\n' "$run_root" "$run_root/evidence" >> "$GITHUB_ENV"
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
