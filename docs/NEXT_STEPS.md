@@ -45,6 +45,26 @@ campo. **Gate:** se função elétrica, alimentação ou segurança da transaç�
 puderem ser estabelecidas, manter o ensaio físico bloqueado. A próxima aquisição
 é documental em outra estação; não requisitar GPIO para descobrir sua função.
 
+A ficha LG Brasil confirma o modelo `14Z90N-V.BR51P1` e a presença do leitor.
+O relatório de certificação da série 14Z90N mostra o módulo e seu cabo
+flexível nas figuras 49 e 50. O catálogo LG Parts identifica
+`EBD63285705` como leitor, e a lista de um distribuidor o associa a
+outras variantes 14Z90N. A montagem da variante brasileira e a pinagem
+do seu conector continuam por confirmar.
+[LG Brasil](https://www.lg.com/br/computadores/notebook-lg-gram/14z90n-v-p2/) ·
+[Fotos de certificação](https://fccid.io/m/ca8310bfba872274321d0bec12768f22a59fa3f35fb706fcd79dc5e6fc82b9a5.pdf) ·
+[LG Parts](https://lgparts.com/pt/collections/laptop/products/ebd63285705) ·
+[Lista do distribuidor](https://www.spareslg.com/gb/sensor-fingerprint-para-portatil-lg-ebd63285705.html)
+
+A próxima fonte independente é a lista de peças LG para o sufixo exato,
+seguida pelo esquema do conector na revisão confirmada da placa e pela
+especificação elétrica do módulo. Esses documentos precisam identificar
+o destino da rede GFPS, eventuais inversores, as alimentações, a tensão
+de I/O e a condição de disponibilidade para SPI. Para futura revisão
+especializada, uma captura passiva de uma inicialização funcional deve
+correlacionar o sinal no lado do módulo e suas alimentações com o CS e
+a primeira leitura válida.
+
 ## 3. Conferir contrato SPI e pilha do kernel alvo
 
 Revisar lado a lado os fontes preservados “v0.4/v0.5” e a cadeia Windows já
