@@ -152,8 +152,15 @@ static void test_reply(struct fake_spi *fake, int expected, unsigned int count)
 
 		assert(r->status == expected_receipt->status);
 		assert(r->actual_length == expected_receipt->actual_length);
-		assert(r->rx_length == expected_receipt->rx_length);
-		assert(!memcmp(r->rx, expected_receipt->rx, sizeof(r->rx)));
+		if (expected_receipt->rx_length > (i ? GX_SPI_CPU_RX_BYTES : 0)) {
+			const u8 empty[GX_SPI_CPU_RX_BYTES] = { 0 };
+
+			assert(!r->rx_length);
+			assert(!memcmp(r->rx, empty, sizeof(r->rx)));
+		} else {
+			assert(r->rx_length == expected_receipt->rx_length);
+			assert(!memcmp(r->rx, expected_receipt->rx, sizeof(r->rx)));
+		}
 	}
 	destroy(&session);
 }
@@ -205,6 +212,14 @@ static void test_lengths(void)
 	fake = reference();
 	fake.replies[1].rx_length = 3;
 	test_reply(&fake, -EMSGSIZE, 2);
+	fake = reference();
+	fake.replies[1].rx_length = 3;
+	fake.replies[1].status = -EIO;
+	test_reply(&fake, -EIO, 2);
+	fake = reference();
+	fake.replies[0].rx_length = 1;
+	fake.replies[0].rx[0] = 0xff;
+	test_reply(&fake, -EMSGSIZE, 1);
 }
 
 static void test_deadline(void)

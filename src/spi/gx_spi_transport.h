@@ -39,6 +39,7 @@ struct gx_spi_message {
 struct gx_spi_receipt {
 	int status;
 	unsigned int actual_length;
+	/* Published RX is limited to the amount requested by the message. */
 	unsigned int rx_length;
 	u8 rx[GX_SPI_CPU_RX_BYTES];
 };

@@ -16,6 +16,9 @@ status zero do executor e retorno diagnóstico `-EBADMSG`. Divergência de
 comprimento com status zero retorna `-EMSGSIZE`. Remoção, cancelamento
 e expiração têm precedência, nessa ordem, no resultado da sessão. Os
 recibos conservam os erros originais mesmo quando esse resultado muda.
+Se o executor informar RX acima da quantidade solicitada, o recibo
+publicado zera o comprimento e o buffer RX e conserva o status do executor
+e o comprimento total informado.
 
 O cancelamento afeta a operação ativa. A remoção fecha a sessão e
 drena o executor. A camada que detém o cliente deve bloquear novas

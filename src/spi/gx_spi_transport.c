@@ -153,6 +153,11 @@ static int execute_message(struct gx_spi_session *session,
 	receipt = &result->receipts[result->count++];
 	receipt->status = session->execute(session->context, message, session,
 					   receipt);
+	if (receipt->rx_length > rx) {
+		receipt->rx_length = 0;
+		memset(receipt->rx, 0, sizeof(receipt->rx));
+		return receipt->status ? receipt->status : -EMSGSIZE;
+	}
 	if (receipt->status)
 		return receipt->status;
 	if (receipt->actual_length != wire || receipt->rx_length != rx)
