@@ -76,36 +76,47 @@ fato oferece. A serialização do par pertence ao cliente.
 A referência simulada cobre o contrato do diagnóstico. O critério de primeira
 resposta válida em 0.3 continua dependendo de evidência obtida no Goodix físico.
 
-## Aquisição do fonte Ubuntu e diagnóstico Git
+## Comparação dos fontes Ubuntu -42 e -43
 
-A comparação solicitada entre `7.0.0-42.42~24.04.1` e
-`7.0.0-43.43~24.04.1` continua pendente. O shell ficou sem resolução
-DNS para arquivo Ubuntu, segurança Ubuntu, Launchpad e espelho consultado.
-O APT local não dispõe de índices `deb-src`. O endpoint do arquivo Ubuntu
-retornou 404 para o descritor `-42` na consulta web e tipo de conteúdo não
-suportado para o `-43`. A tentativa de acessar o arquivo histórico em
-Launchpad e o descritor `-42` no espelho também falhou.
+Os pacotes completos `linux-hwe-7.0` das revisões `7.0.0-42.42~24.04.1` e
+`7.0.0-43.43~24.04.1` foram extraídos com seus patches aplicados fora do
+repositório. A assinatura de cada `InRelease` foi verificada com a chave
+Ubuntu Archive Automatic Signing Key (2018). Os SHA-256 dos índices
+`Sources.xz` conferem com os `InRelease`. Os tamanhos e SHA-256 dos
+descritores, patches e tarball conferem com os índices autenticados.
+[Snapshot noble-security -42](https://snapshot.ubuntu.com/ubuntu/20261104T000000Z/dists/noble-security/) ·
+[Snapshot noble-updates -43](https://snapshot.ubuntu.com/ubuntu/20261119T000000Z/dists/noble-updates/) ·
+[Pool Ubuntu](https://archive.ubuntu.com/ubuntu/pool/main/l/linux-hwe-7.0/)
 
-O descritor `-43` pôde ser lido como texto em um espelho Ubuntu. Ele
-identifica `linux-hwe-7.0`, versão `7.0.0-43.43~24.04.1`, e declara
-os SHA-256 abaixo. A assinatura está presente no texto recuperado e permanece
-sem verificação criptográfica. O tarball e o diff compactado ficaram
-inacessíveis, portanto os valores abaixo são declarações do descritor.
-
-| Artefato | SHA-256 declarado |
+| Artefato | SHA-256 verificado |
 |---|---|
 | `linux-hwe-7.0_7.0.0.orig.tar.gz` | `c6343795c8c7e4feff55f5b309365c8e0eaf49cd6abcb412e32315313f149536` |
+| `linux-hwe-7.0_7.0.0-42.42~24.04.1.diff.gz` | `ab5b2722d3d4bd00a97f4f048f1dc2d8a50cdbbc7ed868aac4ffc59bb516b076` |
 | `linux-hwe-7.0_7.0.0-43.43~24.04.1.diff.gz` | `f377aaedcdc3fc17aab4e453a63c9f34447b0d1081707bd7d137dd5a845df794` |
 
-[Descritor -43 no espelho](https://eu.edge.kernel.org/ubuntu/pool/main/l/linux-hwe-7.0/linux-hwe-7.0_7.0.0-43.43~24.04.1.dsc) · [Publicação Ubuntu -43](https://lists.ubuntu.com/archives/noble-changes/2026-November/060569.html)
+A comparação retornou igualdade byte a byte em 26 arquivos que cobrem SPI
+core, pxa2xx (platform, PCI e DMA), Intel LPSS, runtime PM e os caminhos
+auxiliares ACPI/PCI e cabeçalhos revisados. As anotações de configuração
+comparadas tampouco mostraram alteração nas opções desses subsistemas.
+O resultado cobre o fonte e as opções examinadas. O estado efetivo no
+notebook e a causa de `FF FF` continuam desconhecidos.
 
-Para fechar a comparação, ainda é preciso autenticar ambos os descritores,
-verificar os hashes dos arquivos e extrair as duas árvores com os patches
-Ubuntu aplicados. O foco é `drivers/spi/spi.c` e auxiliares pxa2xx em
-`drivers/spi/`, LPSS e PCI em `drivers/mfd/`, runtime PM em
-`drivers/base/power/` e os caminhos ACPI/PCI envolvidos. A implementação de
-`spi_sync`, `spi_write_then_read`, CS, status e comprimento continua sem diff
-de fonte entre essas versões. A comparação binária anterior dos quatro
-módulos permanece evidência independente e limitada aos módulos examinados.
-[Pendências do kernel alvo](../docs/ARCHITECTURE.md)
+- O SPI core resolve o controlador pela origem do recurso ACPI e extrai CS,
+  modo, frequência e tamanho da palavra. O ID PCI `8086:34ab` seleciona
+  `LPSS_CNL_SSP`, para o qual pxa2xx conserva o número de CS do ACPI.
+  A integração futura deve receber o cliente enumerado pelo SPI core.
+- `spi_sync` aguarda a conclusão. O core mantém CS entre transfers com
+  `cs_change` e `cs_off` zerados e libera CS ao final. No caminho pxa2xx,
+  `actual_length` soma transfers concluídos. `spi_write_then_read` copia
+  o RX quando o status é zero e não fornece essa contagem ao chamador.
+- O core toma a referência de runtime PM antes de iniciar uma fila ociosa
+  e propaga falhas de retomada. pxa2xx reativa o clock na retomada e o pai
+  LPSS restaura o contexto. A espera de conclusão de transfer em modo
+  controlador no core usa o tempo de fio dobrado mais 200 ms. O prazo
+  lógico e o cancelamento da sessão continuam cooperativos.
 
+A auditoria fecha a comparação de fonte para a transação host. Para
+propor o ensaio ainda é preciso comprovar alimentação e estado inicial
+seguro do Goodix, a função e a polaridade de GFPS e a identidade do cliente
+no ambiente previsto. A resposta do sensor no Linux será avaliada durante
+o ensaio autorizado.
