@@ -348,6 +348,58 @@ continuam dependentes de evidência elétrica. Nenhuma sessão ou canal
 foi ativado nesta tarefa.
 [Perfis WPR](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/authoring-recording-profiles)
 
+### Pré-verificação ETW e critério de decisão
+
+| Fonte oficial | Evidência e limite |
+| --- | --- |
+| Device Dstate | O gráfico apresenta estados efetivos ao longo do tempo, agrupados por dispositivo e tipo. O exercício distingue PoFx e dispositivos USB no grupo Non-PoFx. A documentação de áudio demonstra o uso de `Microsoft-Windows-Kernel-Power` e estado inicial para alimentar o gráfico naquele cenário. |
+| D-Irp Duration (ms) | É a duração até conclusão do IRP de transição no gráfico Device Dstate. A documentação de retomada explica o uso para rede e usa `Microsoft-Windows-PDC` para o contexto de Modern Standby. Isso não demonstra emissão de IRP atribuível ao Intel SPI nem o instante elétrico de retomada. |
+| WPRP | Perfis definem provedores, keywords, nível, buffers e modo. O esquema WPRP admite filtros por ID para EventProvider. ID, keyword e nível limitam classes de eventos. A seleção por instância PCI exige um mecanismo adicional comprovado para o evento, pois o filtro por ID não distingue dispositivos que emitem o mesmo evento. |
+
+[Exercício Device Dstate](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/debugging-problems-with-standby-exercise-4) ·
+[Exemplo Kernel-Power](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms) ·
+[Retomada e duração do IRP](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-resume-performance) ·
+[Perfis WPR](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/authoring-recording-profiles) ·
+[Esquema WPRP](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/wprcontrolprofiles-schema)
+
+A documentação consultada não fecha o contrato de eventos para esse
+controlador. Para avaliá-lo no build alvo, são necessários descritores
+de evento com ID, versão, nível e máscara, um campo de identidade PCI
+ou chave de correlação inequívoca, o significado e a codificação da
+transição, timestamp e, para duração do IRP, uma duração documentada
+ou eventos correlacionáveis de pedido e conclusão. Os campos de busca
+no script são candidatos, sem IDs ou máscaras pressupostos. O gráfico
+pode depender de eventos de associação ou de estado inicial, cuja
+necessidade e escopo precisam de confirmação. Um filtro por payload
+do ETW exige esquema e tipo compatíveis. A disponibilidade da API
+não implica suporte no perfil WPRP nem para todos os eventos.
+[Filtros ETW](https://learn.microsoft.com/en-us/windows/win32/api/tdh/ns-tdh-payload_filter_predicate) ·
+[Metadados ETW](https://learn.microsoft.com/en-us/windows/win32/etw/event-metadata-overview)
+
+**Decisão B.** Executar apenas a [pré-verificação no Windows real](../tools/windows/README.md#pré-verificação-de-telemetria-de-energia).
+A restrição e a cobertura ainda não estão demonstradas, portanto
+a entrega não inclui WPRP. A ausência de esquema consultável deixa
+a capacidade indeterminada, inclusive para eventos auto-descritivos.
+Se os metadados não oferecerem caminho demonstrável de atribuição e
+delimitação na origem, encerrar esta linha como C. Considerar A
+somente após confirmar o conjunto mínimo de eventos e suas dependências,
+com o conteúdo permitido já delimitado antes da gravação. A redução
+posterior no WPA serve apenas para análise e exportação.
+
+Para uma futura proposta A, correlacionar a instância do Windows localmente
+com PCI 8086:34AB, SUBSYS 03651854, revisão 30. Definir início pouco antes
+de uma janela já prevista de atividade normal, sem gerar transações ou
+forçar suspensão. Usar uma única janela com limite proposto de até 60 s,
+encerrando assim que a transição esperada estiver registrada, quando
+observável, ou no limite da janela. Interromper a sessão autorizada
+se o escopo aprovado não puder ser mantido ou houver interferência.
+Verificar perda de eventos e buffers e marcar pares incompletos e janelas
+afetadas como inconclusivos, sem inferir transições por ausência. Exportar
+somente identificação de modelo, tempo relativo, estado e duração/status
+quando sustentados pelo esquema. Separar pedido, conclusão e estado
+efetivo. A evidência esperada é uma cronologia de D0/D3 do nó, sem
+inferência sobre CS, trilhos, GFPS ou prontidão do MCU.
+
 ## Condição para retomar o trabalho físico
 
 Concluir primeiro o dossiê e os gates de [NEXT_STEPS.md](NEXT_STEPS.md).

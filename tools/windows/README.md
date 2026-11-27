@@ -57,3 +57,54 @@ Execute a partir da raiz do repositório em Windows PowerShell 5.1 ou PowerShell
 
 O teste usa mocks de PnP, serviço, parâmetros de registro, hash e eventos.
 A sintaxe e o relatório são verificados sem chamar APIs do Windows.
+
+## Pré-verificação de telemetria de energia
+
+Copie `check-power-trace-support.ps1` para uma pasta pessoal. Abra o Windows
+PowerShell 5.1 de 64 bits, entre na pasta do script e execute:
+
+```powershell
+.\check-power-trace-support.ps1 -OutputDirectory "$env:USERPROFILE\Goodix-Diagnostico"
+```
+
+Para revisão, compartilhe apenas o novo `goodix-power-trace-support_*_UTC.json`
+da pasta escolhida. O relatório inclui build, disponibilidade aparente
+dos executáveis, metadados candidatos e sinais de sessão existente.
+A ferramenta não precisa de instalação e um resultado inacessível pode
+ser encaminhado como tal.
+
+- WPR, WPA e logman são procurados no PATH e no diretório do sistema.
+  Para WPA também se verifica o caminho padrão do ADK. Localizações
+  alternativas podem ficar fora da busca. Só WPR e logman são executados,
+  respectivamente com `-status` e `query -ets`.
+- A consulta usa `Get-WinEvent -ListProvider` com os dois nomes exatos
+  documentados abaixo. Para eventos com campos de interesse, o JSON traz
+  ID, versão, nível, máscaras declaradas e nomes de campos de uma lista
+  fechada. `otherFieldCount` conta campos adicionais no esquema e serve
+  como indicação de que será preciso revisar o esquema integral antes de
+  qualquer coleta. Campos são candidatos por nome. Nomes como `State` ou
+  `DeviceName` exigem confirmação semântica, e `PDO` ou `Irp` exigem
+  correlação documentada. Esquemas em tempo de execução podem ficar fora
+  da consulta de manifests.
+- `encontrado` indica evidência no escopo consultado. `ausente` indica
+  executável não localizado, manifest sem correspondência ou resposta
+  reconhecida de WPR inativo, conforme o campo. `inacessivel` indica erro
+  de permissão identificado. `nao_verificavel` inclui formato de resposta
+  não reconhecido, falha sem classificação e ausência de esquema consultável.
+- Sessões são sinalizadas por respostas reconhecidas do WPR e nomes
+  convencionais de loggers em logman. A saída localizada ou um nome
+  diferente pode deixar o resultado indeterminado. A pré-verificação
+  não certifica ausência de conflitos. O relatório exclui os nomes
+  de sessão, caminhos de executáveis, templates brutos, textos de erro,
+  IDs individuais e instâncias de eventos.
+
+Teste offline em Windows PowerShell 5.1 ou PowerShell 7:
+
+```powershell
+& ./tests/windows/test-check-power-trace-support.ps1
+```
+
+[Decisão ETW](../../docs/V03_SPI_TRANSPORT_GAPS.md#pré-verificação-etw-e-critério-de-decisão) ·
+[Get-WinEvent](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.diagnostics/get-winevent?view=powershell-5.1) ·
+[Consultas logman](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/logman-query) ·
+[Status WPR](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/wpr-command-line-options#status)
