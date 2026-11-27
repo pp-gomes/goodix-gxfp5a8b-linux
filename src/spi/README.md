@@ -28,17 +28,36 @@ já admitida pode terminar depois do sinal. `spi_sync` depende dos
 mecanismos de timeout do controlador e pode permanecer bloqueado além
 do prazo lógico.
 
-## Adaptador Linux desabilitado
+## Identidade e ciclo de vida Linux
 
-O ponto de entrada retorna `-EOPNOTSUPP` por uma constante de compilação.
-O Kbuild permite compilar objetos para revisão. A futura associação
-deve receber do bind o `struct spi_device` enumerado a partir do recurso
-SPI de FPNT. O adaptador confere o companion ACPI (HID e caminho
-normalizado), o ancestral PCI Intel `8086:34ab` e o perfil de cliente
-revisado (CS 0, modo 0, 8 bits, teto de 10 MHz). A origem ACPI do recurso
-(`\_SB.PCI0.SPI1`) deve ser conferida contra a associação feita pelo
-kernel alvo antes de habilitar o caminho. Índices globais de barramento
-ficam fora da associação. A flash `spi1.0` fica excluída do plano.
+O Kbuild compila os objetos para revisão. Os pontos de entrada
+`gx_spi_linux_probe` e `gx_spi_linux_remove` ficam sem registro no SPI core.
+O executor retorna `-EOPNOTSUPP` por uma constante de compilação.
+
+`gx_spi_linux_check_client` exige o cliente enumerado pelo SPI core, com HID
+GXFP5A8B, associação física única a FPNT e perfil nativo revisado (CS 0,
+modo 0, oito bits e teto de 10 MHz). Resolve o ResourceSource já conhecido
+(`\_SB_.PCI0.SPI1`) no namespace ACPI, compara o mesmo handle no pai
+ACPI de FPNT, no host MFD e no PCI Intel `8086:34ab`, e valida
+`LPSS_CNL_SSP` no software node da célula MFD. A lista de associações
+do nó SPI1 deve conter esse PCI, a célula e o controlador, sem outro
+PCI ou controlador da mesma classe. Outros filhos MFD, como o DMA,
+podem compartilhar o nó. A origem foi observada em metadados passivos
+do cliente no notebook. A guarda usa o vínculo enumerado e o
+ResourceSource revisado. Ela não avalia `_CRS` nem comprova o conteúdo
+dinâmico do método. Índices de barramento ficam fora da associação.
+
+Cada probe válido detém uma referência ao `spi_device` e inicia uma sessão.
+A remoção retira o contexto de `drvdata`, interrompe a admissão, encerra a
+sessão e aguarda leitores ativos e enfileirados antes de soltar a referência.
+O núcleo de transporte serializa as operações. O proprietário deve
+serializar probe/remove, como faria o driver core, e manter a referência
+ao `spi_device` durante chamadas à API.
+
+Antes de qualquer integração ativa faltam o contrato elétrico (GFPS,
+alimentação e estado inicial), o plano revisado e a autorização específica
+para o ensaio. A vinculação real dos callbacks precisa de revisão separada.
+A flash `spi1.0` fica excluída do plano.
 
 O caminho em revisão converte cada mensagem lógica em uma `spi_message`,
 verifica `spi_max_message_size` e `spi_max_transfer_size` e usa buffers
@@ -57,8 +76,9 @@ Na raiz do projeto:
 make -C tests/spi test sanitize
 ```
 
-As duas variantes usam o mesmo núcleo C com mutexes POSIX no host. Os
-testes exercitam somente o executor sintético. A compilação dos objetos
+As duas variantes usam o mesmo núcleo C com mutexes POSIX no host. A suíte
+Linux compila a guarda e o ciclo de vida com mocks das APIs do kernel.
+O bloqueio físico é exercitado pelo executor real desabilitado. A compilação dos objetos
 confere as APIs de kernel usadas no adaptador. A suíte KUnit de pesquisa
 continua cobrindo o protocolo MCU, staging, eventos e o próprio ciclo de
 vida, com [resultados preservados](../../docs/evidence/README.md).

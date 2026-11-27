@@ -1,6 +1,10 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 #include <linux/acpi.h>
+#include <linux/mfd/core.h>
 #include <linux/pci.h>
+#include <linux/platform_device.h>
+#include <linux/property.h>
+#include <linux/pxa2xx_ssp.h>
 #include <linux/slab.h>
 #include <linux/spi/spi.h>
 
@@ -9,40 +13,110 @@
 /* Source-review gate. No Kconfig, module parameter or device registration. */
 enum { GX_SPI_PHYSICAL_ENABLED = 0 };
 
-static int check_client(struct spi_device *spi)
+#ifdef CONFIG_ACPI
+static bool is_unique_client(struct acpi_device *adev, struct device *dev)
 {
-	struct acpi_device *adev;
-	struct acpi_buffer path = { ACPI_ALLOCATE_BUFFER, NULL };
-	struct device *parent;
-	bool matches;
+	struct acpi_device_physical_node *node;
+	bool matches = false;
 
-	if (!spi)
-		return -ENODEV;
-	adev = ACPI_COMPANION(&spi->dev);
-	if (!adev || strcmp(acpi_device_hid(adev), "GXFP5A8B"))
-		return -ENODEV;
-	if (ACPI_FAILURE(acpi_get_name(adev->handle, ACPI_FULL_PATHNAME_NO_TRAILING, &path)))
-		return -ENODEV;
-	matches = !strcmp(path.pointer, "\\_SB.PCI0.SPI1.FPNT");
-	kfree(path.pointer);
-	if (!matches)
-		return -ENODEV;
+	mutex_lock(&adev->physical_node_lock);
+	node = list_first_entry_or_null(&adev->physical_node_list,
+					struct acpi_device_physical_node, node);
+	if (adev->physical_node_count == 1 && node)
+		matches = node->dev == dev;
+	mutex_unlock(&adev->physical_node_lock);
+	return matches;
+}
 
-	/* The SPI core creates this client from FPNT's SPI connection resource.
-	 * Check the enumerated controller lineage and the reviewed _CRS profile.
-	 */
-	for (parent = &spi->controller->dev; parent; parent = parent->parent) {
-		if (dev_is_pci(parent))
-			break;
+/* One SPI controller may share a companion with its PCI, MFD and DMA nodes. */
+static bool is_unique_controller(struct acpi_device *adev, struct device *ctlr,
+				 struct device *host, struct device *pci)
+{
+	struct acpi_device_physical_node *node;
+	bool found_ctlr = false, found_host = false, found_pci = false;
+
+	mutex_lock(&adev->physical_node_lock);
+	list_for_each_entry(node, &adev->physical_node_list, node) {
+		struct device *dev = node->dev;
+
+		if (dev_is_pci(dev)) {
+			if (dev != pci)
+				goto ambiguous;
+			found_pci = true;
+		} else if (dev->class == ctlr->class) {
+			if (dev != ctlr)
+				goto ambiguous;
+			found_ctlr = true;
+		} else if (dev == host) {
+			found_host = true;
+		}
 	}
-	if (!parent || to_pci_dev(parent)->vendor != PCI_VENDOR_ID_INTEL ||
-	    to_pci_dev(parent)->device != 0x34ab)
+	mutex_unlock(&adev->physical_node_lock);
+	return found_ctlr && found_host && found_pci;
+
+ambiguous:
+	mutex_unlock(&adev->physical_node_lock);
+	return false;
+}
+#endif
+
+int gx_spi_linux_check_client(struct spi_device *spi)
+{
+#ifdef CONFIG_ACPI
+	struct acpi_device *adev, *acpi_parent;
+	const struct mfd_cell *cell;
+	struct device *host, *pci;
+	acpi_handle client_handle, source;
+	u32 type;
+
+	if (!spi || !spi->controller || spi->dev.parent != &spi->controller->dev)
 		return -ENODEV;
+
+	adev = ACPI_COMPANION(&spi->dev);
+	if (!adev || strcmp(acpi_device_hid(adev), "GXFP5A8B") ||
+	    !acpi_device_enumerated(adev) || !is_unique_client(adev, &spi->dev))
+		return -ENODEV;
+	if (ACPI_FAILURE(acpi_get_handle(NULL, "\\_SB_.PCI0.SPI1.FPNT",
+					 &client_handle)) ||
+	    adev->handle != client_handle)
+		return -ENODEV;
+
+	/*
+	 * Resolve the previously reviewed ResourceSource in the namespace.
+	 * Reuse the SPI core's parent match without evaluating _CRS again.
+	 */
+	acpi_parent = acpi_dev_parent(adev);
+	if (ACPI_FAILURE(acpi_get_handle(NULL, "\\_SB_.PCI0.SPI1", &source)) ||
+	    !acpi_parent || acpi_parent->handle != source)
+		return -ENODEV;
+
+	host = spi->controller->dev.parent;
+	if (!host || !dev_is_platform(host) ||
+	    !device_match_acpi_handle(host, source))
+		return -ENODEV;
+	pci = host->parent;
+	if (!pci || !dev_is_pci(pci) || !device_match_acpi_handle(pci, source) ||
+	    to_pci_dev(pci)->vendor != PCI_VENDOR_ID_INTEL ||
+	    to_pci_dev(pci)->device != 0x34ab)
+		return -ENODEV;
+
+	cell = mfd_get_cell(to_platform_device(host));
+	if (!cell || strcmp(cell->name, "pxa2xx-spi") || !cell->swnode ||
+	    fwnode_property_read_u32(software_node_fwnode(cell->swnode),
+				    "intel,spi-pxa2xx-type", &type) ||
+	    type != LPSS_CNL_SSP || !spi->controller->dev.class ||
+	    !is_unique_controller(acpi_parent, &spi->controller->dev, host, pci))
+		return -ENODEV;
+
 	if (spi->num_chipselect != 1 || spi->cs_index_mask != 1 ||
-	    spi_get_chipselect(spi, 0) != 0 || spi->mode != SPI_MODE_0 ||
-	    spi->bits_per_word != 8 || spi->max_speed_hz != 10000000)
+	    spi_get_chipselect(spi, 0) != 0 || spi_get_csgpiod(spi, 0) ||
+	    spi->mode != SPI_MODE_0 || spi->bits_per_word != 8 ||
+	    spi->max_speed_hz != 10000000)
 		return -EINVAL;
 	return 0;
+#else
+	return -ENODEV;
+#endif
 }
 
 int gx_spi_linux_execute(void *context, const struct gx_spi_message *message,
@@ -59,7 +133,7 @@ int gx_spi_linux_execute(void *context, const struct gx_spi_message *message,
 	if (!GX_SPI_PHYSICAL_ENABLED)
 		return -EOPNOTSUPP;
 
-	ret = check_client(spi);
+	ret = gx_spi_linux_check_client(spi);
 	if (ret)
 		return ret;
 	ret = gx_spi_validate_message(message, &wire, &rx_len);

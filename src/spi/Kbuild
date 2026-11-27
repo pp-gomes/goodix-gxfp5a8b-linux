@@ -1,3 +1,3 @@
 # SPDX-License-Identifier: GPL-2.0-only
 # Object-only review target. No module or driver registration.
-obj-y += gx_spi_transport.o gx_spi_linux.o
+obj-y += gx_spi_transport.o gx_spi_linux.o gx_spi_driver.o
