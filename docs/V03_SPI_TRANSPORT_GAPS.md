@@ -190,6 +190,18 @@ SCK durante F0 e F1/RX, o acionamento de MISO e o estado contemporâneo da
 alimentação e de GFPS, idealmente com uma referência Windows funcional.
 [Relato independente](https://www.reddit.com/r/linuxhardware/comments/1wjo1jv/opengoodixspi_update_weve_reached_the_hard_part/)
 
+## Candidato Intel SPI para Windows
+
+O Microsoft Update Catalog oferece o pacote Intel `30.100.2010.1` para
+`PCI\VEN_8086&DEV_34AB`. O CAB conferiu com o digest publicado. Seu INF
+`iaLPSS2_SPI_ICL.inf` declara suporte para AMD64/Windows NT 10.0, associa
+o serviço `iaLPSS2_SPI_ICL` e declara dependência de `SpbCx`. O pacote
+fornece uma referência estática do controlador. A identificação do
+driver usado no Windows funcional do LG exige o vínculo PnP daquela
+instalação. Os metadados do pacote não estabelecem o estado elétrico de
+GFPS, a alimentação ou o CS no sensor.
+[Entrada oficial do Microsoft Update Catalog](https://www.catalog.update.microsoft.com/ScopedViewInline.aspx?updateid=0aad38e1-c449-4146-ae7e-cea1f8a721fb)
+
 ## Condição para retomar o trabalho físico
 
 Concluir primeiro o dossiê e os gates de [NEXT_STEPS.md](NEXT_STEPS.md).
