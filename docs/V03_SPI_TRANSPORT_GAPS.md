@@ -202,6 +202,13 @@ instalação. Os metadados do pacote não estabelecem o estado elétrico de
 GFPS, a alimentação ou o CS no sensor.
 [Entrada oficial do Microsoft Update Catalog](https://www.catalog.update.microsoft.com/ScopedViewInline.aspx?updateid=0aad38e1-c449-4146-ae7e-cea1f8a721fb)
 
+A LG publica o Serial IO `30.100.1932.6` para a variante
+`14Z90N-U.AAS7U1`. O INF desse ZIP também corresponde a `8086:34AB` e
+depende de `SpbCx`, com serviço `iaLPSS2_SPI`. Essa variante documenta
+uma distribuição da família 14Z90N. A seleção da versão no
+`14Z90N-V.BR51P1` permanece a confirmar.
+[Suporte LG da variante U.AAS7U1](https://www.lg.com/us/support/product/lg-14Z90N-U.AAS7U1)
+
 ## Condição para retomar o trabalho físico
 
 Concluir primeiro o dossiê e os gates de [NEXT_STEPS.md](NEXT_STEPS.md).
