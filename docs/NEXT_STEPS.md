@@ -74,14 +74,11 @@ opcode MCU A8 e Chip ID. Identificar o comando mínimo cuja segurança e respost
 tenham base independente; não assumir que a ordem Windows seja uma dependência
 elétrica obrigatória ou que A8 resolva FF FF.
 
-Completar a aquisição/revisão do fonte Ubuntu **exato**, em estação de análise,
-quando disponível: spi.c, spi-pxa2xx.c, spi-pxa2xx-platform.c, intel-lpss.c,
-intel-lpss-pci.c, cabeçalhos relevantes e configuração preservada do alvo.
-O procedimento documental já está em [goodix-kernel-diff-results.md](PUBLICATION.md#exclusões).
-Verificar origem, hashes e revisão, classificar diferenças e focar CS, variante
-8086:34ab, restauração SSP/LPSS, clock, PIO/DMA, PM e propagação de erros.
-Se o material não estiver disponível, declarar “não auditado”, sem tratar essa
-ausência como causa nem bloquear toda a pesquisa documental.
+A [comparação autenticada Ubuntu -42/-43](../src/README.md#comparação-dos-fontes-ubuntu--42-e--43)
+cobriu 26 arquivos, com igualdade byte a byte. A [auditoria focal do CS
+nativo](V03_SPI_TRANSPORT_GAPS.md#cs-nativo-e-modos-históricos) rastreia o
+perfil ativo baixo até o pxa2xx. Falta evidência do nível físico de CS
+durante as mensagens e do estado inicial do sensor.
 
 **Produto:** contrato TX/RX de A03-03 e mapa dos caminhos de erro A03-04.
 **Gate:** nenhuma mudança de CS, divisor, dummy byte, espera ou política PM por
@@ -106,7 +103,10 @@ GFPS apenas porque estão disponíveis no software.
 
 ## 5. Preparar o contrato de um futuro transporte mínimo
 
-Somente especificar nesta etapa, sem implementar backend:
+O [núcleo C e o adaptador Linux desabilitado](../src/spi/README.md) já
+implementam o contrato do diagnóstico de CPU. A regressão em host usa
+`make -C tests/spi test sanitize`. Para revisar uma integração futura,
+aplicar os requisitos abaixo:
 
 - identidade por recursos ACPI e cliente correspondente, com exclusão de spi1.0;
 - operação única e explicitamente delimitada, sem I/O implícito em probe;

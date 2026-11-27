@@ -44,8 +44,8 @@ o fechamento funcional de IRQ, Chip ID, inicialização ou biometria.
 |---|---|---|
 | A03-01 | Identificar cliente ACPI, controlador e CS corretos por recursos, com isolamento da flash e sem hardcode de bus/GPIO/IRQ | Parcial: identidade histórica conhecida; falta dossiê completo vinculado ao ensaio. A exigência bus0 dos módulos antigos não é identificação portátil |
 | A03-02 | Especificar e comprovar as pré-condições de alimentação, sinal de controle, mux, seleção e estado necessário do dispositivo antes do ensaio | Não satisfeito: função/polaridade/domínio elétrico GFPS e estado contemporâneo ao teste não estabelecidos |
-| A03-03 | Definir TX/RX, limites, ordem, CS, perfil e tempos com base no contrato recuperado e na implementação do kernel alvo | Parcial: sequência CPU host recuperada; configuração aplicada/waveform e fonte Ubuntu exato ainda não validados; API genérica de pacotes físicos não demonstrada |
-| A03-04 | Operação física delimitada, serialização dos requests relacionados, propagação de erro/timeout e ausência de retry/reset implícito | Parcial: diagnósticos têm mutex, retorno de erro e one-shot; falta implementação de transporte funcional revisada. Código offline mantém backend desabilitado |
+| A03-03 | Definir TX/RX, limites, ordem, CS, perfil e tempos com base no contrato recuperado e na implementação do kernel alvo | Parcial: sequência CPU implementada em C e fonte Ubuntu exato auditado; faltam configuração aplicada, waveform e evidência de transporte de pacotes físicos |
+| A03-04 | Operação física delimitada, serialização dos requests relacionados, propagação de erro/timeout e ausência de retry/reset implícito | Parcial: sessão C cobre serialização, erros e prazo cooperativo em testes sintéticos; adaptador Linux permanece desabilitado |
 | A03-05 | Obter **resposta válida no Linux** ao comando definido, com TX/RX bruto, comprimento, retorno do controlador e interpretação verificável | **Não satisfeito e bloqueante:** só há FF FF informado. Exit zero, bytes não constantes ou simples diferença de FF FF não bastam |
 | A03-06 | Validar comprimento/formato/endianness e, quando o protocolo tiver, checksums; rejeitar respostas vazias, truncadas ou incompatíveis | Parcial: validações em memória aprovadas; falta aplicá-las a dados reais Linux. Leitura direta CPU não tem o checksum do pacote MCU |
 | A03-07 | Preservar e revisar proveniência/repetibilidade: hashes, kernel, parâmetros, pré-condições, sequência e resultado do ensaio, sem depender apenas de relato | Não satisfeito para transporte válido: falta dossiê de uma execução física bem-sucedida e sua confirmação delimitada |
@@ -65,7 +65,7 @@ de dois bytes em comprovação de suporte a todos os pacotes MCU.
 | Diferença de preparação Windows | Windows passa pela consulta de versão MCU antes da CPU no SelfCheck | Ordem de software não demonstra que A8 habilite a CPU; não enviar A8 como tentativa de correção |
 | MCU não recebeu WakeUp | Linux “v0.5” acrescentou E5, mas permaneceu FF FF | Êxito de spi_write não confirma recepção/estado MCU; apenas E5 faltante não explica mais o conjunto de resultados |
 | Configuração/CS/clock/pinmux do SPI | Perfil declarado coincide; não há divergência lógica demonstrada | Falta configuração efetiva e evidência física. GPIO46/259 não verifica pads SCK/MOSI/MISO/CS |
-| PM/retomada do SSP/LPSS | Autosuspend informado 50 ms coincide com espera pós-E5 | Core de referência retoma para novas mensagens; “v0.4” também falhou sem E5/espera. Falta trace histórico ou diferença concreta no kernel alvo |
+| PM/retomada do SSP/LPSS | Autosuspend informado 50 ms coincide com espera pós-E5 | Core Ubuntu auditado retoma para novas mensagens; “v0.4” também falhou sem E5/espera. Falta trace histórico ou diferença concreta no kernel alvo |
 | IRQ GFPI ausente | Recepção de pacotes MCU depende de IRQ | Leitura CPU síncrona não aguarda GFPI. IRQ do controlador SPI é outro recurso; contador isolado não resolve FF FF |
 | Endianness ou parser | Parser/ordem precisam estar corretos | Trocar FF FF continua FF FF; não explica a diferença para 00 A1 |
 | Reset necessário | SelfCheck Windows tem ramo condicional de recuperação | Não houve registro de HardResetMcu nos 17 sucessos informados. Não é requisito demonstrado nem fallback autorizado |
@@ -87,15 +87,108 @@ Linux histórica 176 pertencem a espaços diferentes; não codificar tais númer
 
 PM: 5 s do S0 Idle Windows refere-se ao dispositivo Goodix; 50 ms de autosuspend
 Linux refere-se ao controlador pxa2xx, e o pai PCI tem política própria. Não
-deduzir falha causal da razão 5000/50. O pacote alvo informado é
-linux-hwe-7.0 7.0.0-42.42~24.04.1, cujo diff exato está pendente. O Linux 6.12
+deduzir falha causal da razão 5000/50. A [comparação Ubuntu autenticada](../src/README.md#comparação-dos-fontes-ubuntu--42-e--43) registrou igualdade nos caminhos de PM revisados. O Linux 6.12
 fixado no CI offline não certifica essa pilha física.
 
 Referências detalhadas: [contrato GFPS](PUBLICATION.md#exclusões),
 [mapeamento](PUBLICATION.md#exclusões),
 [lacunas elétricas](PUBLICATION.md#exclusões),
 [cronologia PM teórica](PUBLICATION.md#exclusões) e
-[diff pendente](PUBLICATION.md#exclusões).
+[comparação autenticada Ubuntu](../src/README.md#comparação-dos-fontes-ubuntu--42-e--43).
+
+## CS nativo e modos históricos
+
+A inspeção focal usou arquivos individuais da tag Ubuntu
+`Ubuntu-hwe-7.0-7.0.0-43.43_24.04.1` no Launchpad. A extração autenticada
+anterior em `/tmp/gx-ubuntu-source/` já não estava disponível. A comparação
+de 26 arquivos documentada em [src](../src/README.md) é a evidência anterior.
+[Fonte Ubuntu por tag](https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/noble/tree/?h=Ubuntu-hwe-7.0-7.0.0-43.43_24.04.1)
+
+1. No ACPI arquivado, `FPNT._CRS` usa `SPIM` com origem `SPI1`. O ramo
+   correspondente declara CS 0, `PolarityLow`, quatro fios, CPOL e CPHA
+   zerados. As alterações do template afetam fase e velocidade.
+   Em `drivers/spi/spi.c`, `acpi_spi_add_resource` resolve a origem do
+   recurso e só acrescenta `SPI_CS_HIGH` para `ACPI_SPI_ACTIVE_HIGH`
+   (`include/acpi/acrestyp.h`). `acpi_spi_device_alloc` copia os bits para
+   `spi_device.mode` e o CS físico para o índice 0. Os campos e as flags
+   estão em `include/linux/spi/spi.h` e `include/uapi/linux/spi/spi.h`.
+2. Em `drivers/mfd/intel-lpss-pci.c`, `8086:34ab` seleciona `cnl_spi_info`.
+   `intel-lpss.c` fornece o filho `pxa2xx-spi` e o software node.
+   `pxa2xx_spi_init_pdata`, em `spi-pxa2xx-platform.c`, consome a
+   propriedade `intel,spi-pxa2xx-type` que define `LPSS_CNL_SSP`
+   (`include/linux/pxa2xx_ssp.h`). A tabela do caminho PCI direto em
+   `spi-pxa2xx-pci.c` não contém `34ab`. Em `spi-pxa2xx.c`,
+   `pxa2xx_spi_fw_translate_cs` conserva CS 0 para CNL. O número de CS
+   nativos deriva do campo de capacidades da variante no probe.
+3. Sem descritor GPIO para CS, `spi_set_cs` passa ao callback o nível
+   pretendido. Para selecionar/liberar com `SPI_CS_HIGH` limpo, passa
+   `false`/`true`. Com a flag, passa `true`/`false`.
+   `pxa2xx_spi_set_cs` encaminha nível baixo para `cs_assert` e alto para
+   `cs_deassert`. `lpss_ssp_cs_control` limpa o bit de nível para baixo
+   e o seta para alto. A inicialização em `lpss_ssp_setup` ativa controle
+   por software e começa em alto. Em CNL, o registrador de CS está em
+   `0x24` no bloco privado `0x200`, com seletor nos bits 9:8 e nível no
+   bit 1. A flag inverte os níveis prescritos pelo core, sem programar um
+   bit independente de polaridade no LPSS.
+4. O seletor é atualizado só no ramo de nível baixo, com espera de dois
+   ciclos SSP quando muda. Por isso, numa configuração ativa alta, o
+   ramo de seleção lógica sobe o nível sem atualizar o seletor naquele
+   ponto. Essa particularidade depende do CS previamente selecionado e
+   não contradiz o perfil ativo baixo do GXFP5A8B. CNL também força
+   brevemente o clock para efetivar a troca de nível sob gating.
+   `cs_deassert` espera o SSP ficar ocioso ou atingir o limite da espera.
+   A retomada em `intel-lpss.c` restaura o contexto privado.
+
+O caminho nativo prevê CS baixo durante F0, alto no intervalo entre
+mensagens e baixo durante F1 e RX2. O fonte não demonstra inversão
+adicional para esse perfil. O nível no componente, o mux, o intervalo
+real entre mensagens e a disponibilidade do sensor continuam em aberto.
+
+Os fontes históricos imprimem o modo integral no probe. Nos registros
+localizados de `FF FF`, o resultado está preservado por relato, sem as linhas
+originais de probe ligadas ao ensaio e ao hash do módulo. A referência
+histórica de ambiente é `7.0.0-42-generic`, sem comprovação por execução
+para ambos os ensaios. Se os módulos corresponderem aos snapshots, a v0.4
+exclui CPOL, CPHA, CS_HIGH e 3WIRE, mas não permite recuperar as demais
+flags. A v0.5 só chega ao diagnóstico com modo integral `0x0`. O adaptador
+atual também exige `0x0`. Não há indício de diferença de modo aplicado.
+Uma flag extra no ensaio v0.4 segue incerta e não explica isoladamente
+o mesmo resultado no caminho v0.5.
+
+A análise Windows anterior registra a abertura pelo ID de conexão do
+Resource Hub em `SpiDevicePrepareHardware`. A preparação registra uma
+escrita zero em GFPS. O SelfCheck obtém uma resposta à
+consulta de versão MCU antes da leitura de CPU. Abrir a conexão, completar
+uma transferência e receber resposta interpretável são observações distintas.
+A ordem mostra uma dependência no fluxo do host. A configuração elétrica
+efetiva e eventual tratamento de CS pelo controlador Windows ficam fora da
+evidência da DLL. [Relatórios privados acpi-gpio-spi.md e a8-selfcheck-followup.md](PUBLICATION.md#exclusões)
+
+O GXFP51A0 do MateBook 13 usa `8086:02ab`, que também seleciona
+`LPSS_CNL_SSP` na tabela Ubuntu examinada. O projeto relata ACPI e
+Windows indicando CS ativo baixo, mas obteve quadros com checksum e versão
+coerentes apenas com a combinação de flag `SPI_CS_HIGH` e estado inicial
+específico do MCU. Os controles variaram os dois fatores separadamente e
+houve repetição em outro modelo, o Honor BBR-WAX9. Isso demonstra efeito
+da combinação nessas placas, sem explicar a aparente divergência entre o
+modo lógico e o nível efetivo na entrada do sensor. O OpenGoodixSPI define
+`SPI_MODE_0` integralmente no probe dos HIDs que suporta e chama
+`spi_setup`. Seus relatos de probe, IRQ e respostas em outros dispositivos
+não vinculam a seleção a uma forma de onda ou a uma resposta GXFP5A8B.
+[GXFP51A0 FIRST-CONTACT](https://github.com/szlukabence/goodix-fingerprint-spi-linux/blob/7b8284898696e26a2fd5cb9a05b8605012439a7d/docs/FIRST-CONTACT.md) ·
+[Plataforma GXFP51A0](https://github.com/szlukabence/goodix-fingerprint-spi-linux/blob/7b8284898696e26a2fd5cb9a05b8605012439a7d/docs/HARDWARE.md) ·
+[OpenGoodixSPI](https://github.com/PeshalaDilshan/OpenGoodixSPI/tree/089453cb400313eec254b3ebd3f68d482d061506)
+
+O relato independente do LG Gram 14Z90N-U.AAS7U1 confirma o HID segundo o
+proprietário. Não inclui evidência de CS, GFPS, alimentação ou estado
+inicial, e a equivalência elétrica com a variante V.BR51P1 permanece aberta.
+Evidências já existentes que ajudariam são a revisão de placa/BIOS sem
+números de série, o resumo dos recursos ACPI e do controlador e registros
+diagnósticos anteriores com modo integral e resultado. A observação
+discriminante para revisão especializada seria a correlação entre CS e
+SCK durante F0 e F1/RX, o acionamento de MISO e o estado contemporâneo da
+alimentação e de GFPS, idealmente com uma referência Windows funcional.
+[Relato independente](https://www.reddit.com/r/linuxhardware/comments/1wjo1jv/opengoodixspi_update_weve_reached_the_hard_part/)
 
 ## Condição para retomar o trabalho físico
 

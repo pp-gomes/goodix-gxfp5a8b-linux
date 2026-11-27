@@ -23,6 +23,7 @@ suítes KTAP ou versões embutidas. Caminhos originais e evidências são preser
 | C13 — evidência Windows/ACPI/GPIO | [dsdt.dsl](PUBLICATION.md#exclusões), [analysis](PUBLICATION.md#exclusões), driver/Wbdi.dll, relatórios de plataforma | Contratos estáticos, recursos e registros históricos | 0.1–0.6; pesquisa posterior para 0.7 | Software Windows não determina sozinho polaridade, tensão ou estado elétrico Linux |
 | C14 — metadados e checks passivos | [linux-readonly-checks.sh](../tests/support/linux-readonly-checks.sh), tests/test_linux_readonly_checks.py | Coletor allowlist e testes com árvores artificiais | Dossiê de identidade e ambiente 0.1/0.2/0.3 | Não executado nesta tarefa; não mede waveform/rails. Não confundir script passivo com atributos antigos que enviam SPI |
 | C15 — pacotes e evidências | ZIPs linux/, arquivos de validação, ci/goodix/local-validation/, goodix-uml-basic-41575738572-1.zip, goodix-v07-kcsan-qemu-ci.zip e sua árvore extraída | Histórico de fontes/build/CI e distribuição | Proveniência de todos os marcos | Pacotes e extrações são cópias, não implementações adicionais. Falha CI antiga não é evidência do sucesso posterior informado |
+| C16 — transporte diagnóstico 0.3-A | [src/spi](../src/spi/README.md), [tests/spi](../tests/spi/Makefile), [CI offline](../.github/workflows/offline-host.yml) | Sessão C, executor sintético e adaptador Linux desabilitado | Evidência offline para A03-01, A03-03, A03-04 e A03-06 | Reproduzir com `make -C tests/spi test sanitize`. Falta confirmar a origem ACPI do controlador e obter evidência física |
 
 Os relatórios `v07-*` são registros do componente offline, mesmo quando o nome
 não o explicita. Os [artefatos KUnit](evidence/README.md) registram os 25 casos
@@ -32,12 +33,12 @@ aprovados em cada um dos quatro perfis.
 
 | Critério em V03_SPI_TRANSPORT_GAPS | Componentes de suporte | O que falta além deles |
 |---|---|---|
-| A03-01 — identidade | C01, C02, C13, C14 | Dossiê por execução, sem número global fixo |
+| A03-01 — identidade | C01, C02, C13, C14, C16 | Dossiê por execução, sem número global fixo |
 | A03-02 — pré-condições | C02, C13 | Contrato elétrico e estado aplicável ao ensaio |
-| A03-03 — contrato TX/RX | C04, C05, C06, C07 | Configuração aplicada, CS/tempos e caminho físico validado |
-| A03-04 — operação delimitada e erros | C04, C05, C08, C10 | Implementação física revisada, distinta do backend desabilitado |
+| A03-03 — contrato TX/RX | C04, C05, C06, C07, C16 | Configuração aplicada, CS/tempos e caminho físico validado |
+| A03-04 — operação delimitada e erros | C04, C05, C08, C10, C16 | Implementação física revisada, distinta do backend desabilitado |
 | A03-05 — resposta válida | Referência Windows C13; parsers C06/C07 | Resposta real Linux ausente; requisito bloqueante |
-| A03-06 — formato e limites | C06, C07, C08, C11 | Associação dos bytes reais ao contrato do comando usado |
+| A03-06 — formato e limites | C06, C07, C08, C11, C16 | Associação dos bytes reais ao contrato do comando usado |
 | A03-07 — repetibilidade e proveniência | C12, C15 | Dossiê do ensaio físico e validação independente dos resultados |
 
 ## Integridade dos arquivos originais

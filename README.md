@@ -53,6 +53,7 @@ Em Linux com Python 3, compilador C, Make e binutils, execute na raiz do projeto
 ```sh
 python3 -B -m unittest discover -s tests -v
 python3 -B -m unittest discover -s ci/goodix/tests -v
+make -C tests/spi test sanitize
 make -C research/offline-mcu test sanitize audit
 python3 -B research/offline-kunit/tools/check-protocol-parity.py
 ```
@@ -61,6 +62,6 @@ Para KUnit com Linux v6.12, os workflows manuais [UML](.github/workflows/goodix-
 
 ## Próximos passos
 
-A etapa 0.3-A precisa estabelecer identidade, estado elétrico, perfil SPI, CS, temporização e comportamento do driver na revisão Ubuntu exata. A etapa 0.3-B depende de uma resposta Linux interpretável, verificável e repetível. Depois disso, o roadmap segue por IRQ, Chip ID, inicialização, protocolo biométrico e integração com libfprint. Veja os [critérios A03-01–A03-07](docs/V03_SPI_TRANSPORT_GAPS.md) e o [plano de investigação](docs/NEXT_STEPS.md).
+A etapa 0.3-A já conta com o [diagnóstico C offline](src/spi/README.md) e a [comparação dos fontes Ubuntu exatos](src/README.md#comparação-dos-fontes-ubuntu--42-e--43). Ainda precisa confirmar a associação ACPI no ambiente previsto e o estado elétrico, incluindo CS e temporização. A etapa 0.3-B depende de uma resposta Linux interpretável, verificável e repetível. Depois disso, o roadmap segue por IRQ, Chip ID, inicialização, protocolo biométrico e integração com libfprint. Veja os [critérios A03-01–A03-07](docs/V03_SPI_TRANSPORT_GAPS.md) e o [plano de investigação](docs/NEXT_STEPS.md).
 
 A reprodução se limita aos testes offline. Os módulos em `historical/` são material de estudo. **`spi1.0` é a flash do notebook e deve permanecer intocada.** A [revisão de publicação](docs/PUBLICATION.md) registra os itens excluídos e pendentes.
