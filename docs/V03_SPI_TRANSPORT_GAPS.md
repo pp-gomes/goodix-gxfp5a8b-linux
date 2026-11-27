@@ -190,24 +190,47 @@ SCK durante F0 e F1/RX, o acionamento de MISO e o estado contemporâneo da
 alimentação e de GFPS, idealmente com uma referência Windows funcional.
 [Relato independente](https://www.reddit.com/r/linuxhardware/comments/1wjo1jv/opengoodixspi_update_weve_reached_the_hard_part/)
 
-## Candidato Intel SPI para Windows
+## Controlador Intel SPI no Windows
 
 O Microsoft Update Catalog oferece o pacote Intel `30.100.2010.1` para
 `PCI\VEN_8086&DEV_34AB`. O CAB conferiu com o digest publicado. Seu INF
 `iaLPSS2_SPI_ICL.inf` declara suporte para AMD64/Windows NT 10.0, associa
 o serviço `iaLPSS2_SPI_ICL` e declara dependência de `SpbCx`. O pacote
-fornece uma referência estática do controlador. A identificação do
-driver usado no Windows funcional do LG exige o vínculo PnP daquela
-instalação. Os metadados do pacote não estabelecem o estado elétrico de
-GFPS, a alimentação ou o CS no sensor.
+fornece uma referência estática distinta do pacote instalado confirmado
+abaixo.
 [Entrada oficial do Microsoft Update Catalog](https://www.catalog.update.microsoft.com/ScopedViewInline.aspx?updateid=0aad38e1-c449-4146-ae7e-cea1f8a721fb)
 
 A LG publica o Serial IO `30.100.1932.6` para a variante
 `14Z90N-U.AAS7U1`. O INF desse ZIP também corresponde a `8086:34AB` e
-depende de `SpbCx`, com serviço `iaLPSS2_SPI`. Essa variante documenta
-uma distribuição da família 14Z90N. A seleção da versão no
-`14Z90N-V.BR51P1` permanece a confirmar.
+depende de `SpbCx`, com serviço `iaLPSS2_SPI`. O inventário Windows de
+27/11/2026 do `14Z90N-V.BR51P1` vincula `8086:34AB` a esse serviço e à
+versão `30.100.1932.6`. SYS, INF e CAT da exportação PnP coincidem por
+SHA-256 com os três membros do ZIP LG. O SHA-256 do SYS é
+`efd2eea34f64d9ee8aaa1d4ac2885686504011547b1de3350e95d2884f561712`.
+Essa identificação vale para a instalação inventariada. A versão do
+controlador nos ensaios históricos continua sem vínculo por execução.
 [Suporte LG da variante U.AAS7U1](https://www.lg.com/us/support/product/lg-14Z90N-U.AAS7U1)
+
+A análise estática do SYS no Ghidra 12.2 rastreou o descritor SPI de
+`SpbCx` até os parâmetros por alvo, incluindo CS, polaridade, modo,
+tamanho de palavra e clock. O Linux recupera o perfil na enumeração
+ACPI e preserva o número de seleção no caminho `LPSS_CNL_SSP`.
+Os dois caminhos são compatíveis com a seleção declarada de FPNT
+(CS 0, ativo baixo). O binário Windows tem caminhos de CS condicionados
+à variante do controlador. O ramo executado e o nível no sensor
+durante os ensaios permanecem sem evidência contemporânea.
+
+Na entrada em D0, o Windows reinicializa o host e invalida a
+configuração de transferência em cache. No Linux a retomada é
+distribuída entre o SPI core, o clock do filho pxa2xx e a restauração
+do contexto privado pelo pai Intel LPSS. O controlador Windows
+também tem políticas de inatividade distintas conforme o estado do
+monitor e calcula o clock por alvo. Essas diferenças de software
+justificam conferir configurações e eventos arquivados do controlador.
+A política aplicada, o clock efetivo e sua relação com `FF FF`
+continuam indeterminados. O escopo auditado trata do host SPI e
+deixa em aberto a função de GFPS e a alimentação do sensor.
+[Fonte Ubuntu revisado](https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/noble/tree/?id=60e65196d87a3b82950ceb158a08953b6468c785)
 
 ## Condição para retomar o trabalho físico
 

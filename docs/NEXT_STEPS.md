@@ -80,6 +80,13 @@ nativo](V03_SPI_TRANSPORT_GAPS.md#cs-nativo-e-modos-históricos) rastreia o
 perfil ativo baixo até o pxa2xx. Falta evidência do nível físico de CS
 durante as mensagens e do estado inicial do sensor.
 
+O [controlador Intel instalado](V03_SPI_TRANSPORT_GAPS.md#controlador-intel-spi-no-windows)
+já foi identificado e analisado estaticamente. Se houver registros
+arquivados do controlador, correlacionar as transições de energia e os
+parâmetros efetivos de clock e CS com a primeira solicitação SPI de cada
+ensaio. Sem esses registros, priorizar a documentação elétrica da revisão
+da placa e a avaliação especializada descritas na seção 2.
+
 **Produto:** contrato TX/RX de A03-03 e mapa dos caminhos de erro A03-04.
 **Gate:** nenhuma mudança de CS, divisor, dummy byte, espera ou política PM por
 tentativa. Só uma diferença demonstrada poderá fundamentar proposta posterior.
