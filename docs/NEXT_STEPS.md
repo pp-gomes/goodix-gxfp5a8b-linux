@@ -45,25 +45,33 @@ campo. **Gate:** se função elétrica, alimentação ou segurança da transaç�
 puderem ser estabelecidas, manter o ensaio físico bloqueado. A próxima aquisição
 é documental em outra estação; não requisitar GPIO para descobrir sua função.
 
-A ficha LG Brasil confirma o modelo `14Z90N-V.BR51P1` e a presença do leitor.
-O relatório de certificação da série 14Z90N mostra o módulo e seu cabo
-flexível nas figuras 49 e 50. O catálogo LG Parts identifica
-`EBD63285705` como leitor, e a lista de um distribuidor o associa a
-outras variantes 14Z90N. A montagem da variante brasileira e a pinagem
-do seu conector continuam por confirmar.
-[LG Brasil](https://www.lg.com/br/computadores/notebook-lg-gram/14z90n-v-p2/) ·
-[Fotos de certificação](https://fccid.io/m/ca8310bfba872274321d0bec12768f22a59fa3f35fb706fcd79dc5e6fc82b9a5.pdf) ·
-[LG Parts](https://lgparts.com/pt/collections/laptop/products/ebd63285705) ·
-[Lista do distribuidor](https://www.spareslg.com/gb/sensor-fingerprint-para-portatil-lg-ebd63285705.html)
+O DMI do equipamento de referência informa fabricante LG Electronics,
+produto `14Z90N-V.BR51P1` versão `0.1`, placa `14Z90N` revisão
+`FAB1` e BIOS Phoenix Technologies `C2ZE0210 X64` de 02/02/2021.
+O campo SKU estava vazio. A LG Brasil confirma a variante comercial,
+a cor titânio e a presença do leitor. `FAB1` é a revisão informada
+pelo firmware. Falta o vínculo com a identificação física da PCB e
+com a lista de montagem do produto.
+[LG Brasil](https://www.lg.com/br/computadores/notebook-lg-gram/14z90n-v-p2/)
 
-A próxima fonte independente é a lista de peças LG para o sufixo exato,
-seguida pelo esquema do conector na revisão confirmada da placa e pela
-especificação elétrica do módulo. Esses documentos precisam identificar
-o destino da rede GFPS, eventuais inversores, as alimentações, a tensão
-de I/O e a condição de disponibilidade para SPI. Para futura revisão
-especializada, uma captura passiva de uma inicialização funcional deve
-correlacionar o sinal no lado do módulo e suas alimentações com o CS e
-a primeira leitura válida.
+| Item | Referência pública | Confiança para a unidade |
+| --- | --- | --- |
+| Placa principal | LG Parts identifica `EBR30174102` como conjunto de PCB principal. HPecas o lista para a família 14Z90N. SuperParts anuncia revisão 1.0, i5-1035G7 e 8 GB | Candidato de família. Falta vínculo entre `BR51P1/FAB1`, o PN e a revisão física anunciada |
+| Leitor | O HID `GXFP5A8B` identifica o periférico lógico nos registros locais. LG Parts cataloga `EBD63285705` como leitor e HPecas o lista para 14Z90N | Alta para o HID. Candidato de família para o PN do conjunto |
+| Flex | As figuras 49/50 do relatório de certificação mostram o conjunto branco 14Z90N com flex. O catálogo de família lista flats sem atribuição ao leitor | PN do flex e pinagem da montagem titânio permanecem desconhecidos |
+
+[LG Parts, placa](https://lgparts.com/products/ebr30174102) ·
+[LG Parts, leitor](https://lgparts.com/products/ebd63285705) ·
+[HPecas, família 14Z90N](https://hpecas.com/module/hpsearch/results?lg_product=14Z90N) ·
+[SuperParts, placa anunciada](https://superparts.es/placas-base2/placa-base-lg-ebr30174102-rev-10-14z90n-i5-1035g7-8gb) ·
+[Certificação, figuras 49/50](https://fccid.io/m/ca8310bfba872274321d0bec12768f22a59fa3f35fb706fcd79dc5e6fc82b9a5.pdf)
+
+A busca dirigida terminou sem lista pública de serviço que vincule
+a variante e revisão ao conjunto e flex. Uma lista autorizada de peças
+da variante com revisão, ou confirmação independente das marcações de
+placa, módulo e flex em futura revisão autorizada, permite fechar esse
+vínculo. A pinagem exige fonte elétrica específica da montagem. Fotos
+de família servem para localização documental.
 
 ## 3. Conferir contrato SPI e pilha do kernel alvo
 
@@ -108,6 +116,12 @@ ausência de causa confirmada permanece explicitada; não escolher reset, PM ou
 GFPS apenas porque estão disponíveis no software.
 
 ### Decisão após a validação do coletor Windows
+
+A identificação parcial da montagem (B) e a dependência de revisão
+elétrica especializada (C) orientam a próxima etapa. O código candidato
+de placa permite restringir a busca por lista ou registro de serviço (A).
+Continua sem incompatibilidade de software demonstrada (D).
+A especificação privada de requisitos segue a [política de publicação](PUBLICATION.md#exclusões).
 
 Para A03-02, obter primeiro documentação da revisão exata da placa,
 montagem do módulo e pinagem do flex. Vincular o módulo à identidade

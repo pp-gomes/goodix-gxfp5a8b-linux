@@ -314,6 +314,40 @@ uma incompatibilidade que sustente correção offline. Um snapshot Linux
 atual de runtime PM foi dispensado por não discriminar os cenários dos
 ensaios históricos.
 
+## Referência funcional atual e telemetria Windows
+
+Em 27/11/2026, o proprietário confirmou que o leitor do equipamento de
+referência seguia funcionando no Windows Hello. É uma confirmação funcional
+direta. Os resultados diagnósticos `00 A1` no Windows e `FF FF` no Linux
+são históricos, de execuções diferentes. A confirmação atual não inclui
+captura elétrica, repetição do diagnóstico ou comparação simultânea.
+
+Uma coleta futura e delimitada de ETW de energia, via WPR e análise no
+gráfico **Device Dstate** do WPA, pode mostrar os estados D ao longo do
+tempo e, quando disponível, a duração do IRP de transição. A Microsoft
+documenta Microsoft-Windows-PDC para contexto de Modern Standby. Esse
+contexto por si só não identifica o D0 do controlador Intel. Para ter
+valor, a captura deve identificar inequivocamente o nó PCI alvo e uma
+transição observada, distinguir estado efetivo de duração de IRP e
+registrar lacunas ou perdas. A cobertura desse controlador no build
+26300 ainda precisa ser confirmada. Os eventos PnP 400/410 e o último D3
+do coletor não oferecem essa cronologia.
+[Device Dstate no WPA](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/debugging-problems-with-standby-exercise-4) ·
+[Retomada e IRP de energia](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-resume-performance)
+
+Uma eventual sessão deve ter janela curta e perfil revisado com
+provedores e palavras-chave de energia delimitados e sem provedores
+biométricos, payload SPI, pilhas ou perfil geral amplo. Observar somente
+atividade normal do sistema, sem transação experimental ou alteração
+de política. Confirmar previamente os esquemas de evento e os dados
+efetivamente coletados. Manter ETL privado e exportar somente o modelo
+do dispositivo, tempos relativos e estados pertinentes. Sem evento
+atribuível ao alvo, a retomada permanece indeterminada. ETW descreve
+atividade do sistema operacional. GFPS, trilhos, prontidão do MCU e CS
+continuam dependentes de evidência elétrica. Nenhuma sessão ou canal
+foi ativado nesta tarefa.
+[Perfis WPR](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/authoring-recording-profiles)
+
 ## Condição para retomar o trabalho físico
 
 Concluir primeiro o dossiê e os gates de [NEXT_STEPS.md](NEXT_STEPS.md).
