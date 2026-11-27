@@ -80,12 +80,11 @@ nativo](V03_SPI_TRANSPORT_GAPS.md#cs-nativo-e-modos-históricos) rastreia o
 perfil ativo baixo até o pxa2xx. Falta evidência do nível físico de CS
 durante as mensagens e do estado inicial do sensor.
 
-O [controlador Intel instalado](V03_SPI_TRANSPORT_GAPS.md#controlador-intel-spi-no-windows)
-já foi identificado e analisado estaticamente. Se houver registros
-arquivados do controlador, correlacionar as transições de energia e os
-parâmetros efetivos de clock e CS com a primeira solicitação SPI de cada
-ensaio. Sem esses registros, priorizar a documentação elétrica da revisão
-da placa e a avaliação especializada descritas na seção 2.
+A [primeira execução do coletor Windows](V03_SPI_TRANSPORT_GAPS.md#primeira-execução-do-coletor-windows-e-comparação-de-energia)
+confirmou a identidade do SYS e delimitou a configuração persistente.
+A análise de energia não demonstrou defeito corrigível no caminho Linux.
+O caminho crítico é obter evidência elétrica e temporal no hardware
+identificado, seguindo a decisão da seção 4.
 
 **Produto:** contrato TX/RX de A03-03 e mapa dos caminhos de erro A03-04.
 **Gate:** nenhuma mudança de CS, divisor, dummy byte, espera ou política PM por
@@ -107,6 +106,52 @@ de preencher a lacuna. A especificação não autoriza medição ou nova transa�
 **Produto:** decisão de prontidão ou lista objetiva de bloqueadores. **Gate:**
 ausência de causa confirmada permanece explicitada; não escolher reset, PM ou
 GFPS apenas porque estão disponíveis no software.
+
+### Decisão após a validação do coletor Windows
+
+Para A03-02, obter primeiro documentação da revisão exata da placa,
+montagem do módulo e pinagem do flex. Vincular o módulo à identidade
+ACPI FPNT/GXFP5A8B e ao controlador PCI 8086:34AB, SUBSYS 03651854,
+revisão 30. A documentação deve identificar o destino de GFPS, função,
+polaridade, domínio e limites de I/O, inversores ou tradutores, terras,
+trilhos e condições de disponibilidade do MCU. Fotos e referências
+de outras variantes ajudam a localizar documentos. A equivalência
+elétrica depende de confirmação para a montagem alvo.
+
+Se a documentação permitir identificar pontos de observação seguros,
+submeter para revisão especializada uma captura passiva da inicialização
+Windows funcional no mesmo hardware. Usar uma base temporal comum para
+correlacionar os seguintes dados, desde antes da preparação até a primeira
+resposta diagnóstica já conhecida.
+
+| Evidência | Resultado que permite distinguir |
+| --- | --- |
+| GFPS no lado do módulo e trilhos principal e de I/O, com referência de terra confirmada | Ordem, níveis e estabilidade de alimentação em relação à preparação. A função de GFPS exige correlação com o circuito |
+| Estado inicial do módulo e disponibilidade do MCU | Tempo entre estabilização dos trilhos, GFPS e primeira resposta válida a uma operação existente. Uma resposta comprova disponibilidade naquele instante |
+| Transição de energia do host com retorno dos callbacks, quando houver telemetria autorizada | D0 ou retomada reportada antes do primeiro clock, com erro ou sucesso e indicação explícita quando a transição não for observável |
+| CS e SCLK na entrada do sensor e MOSI/MISO, com captura desde antes da seleção | Polaridade, integridade da janela de seleção, modo, clock e tráfego efetivamente recebido e devolvido |
+
+A revisão deve confirmar pontos do lado do módulo, tensão máxima,
+referência de terra, carga admissível das sondas e proteção contra
+curto, backfeed e ESD. A captura depende de profissional habilitado,
+osciloscópio com sondas adequadas aos domínios e à carga e, se necessário,
+analisador lógico com limiares compatíveis e sincronizado. Se identidade,
+pinagem, níveis, acesso seguro ou sincronização ficarem indeterminados,
+interromper o planejamento do ensaio até resolver a lacuna. A proposta
+exige autorização específica. A flash excluída fica fora da montagem
+de medição e de qualquer transação.
+
+A03-02 requer contrato elétrico documentado e confirmação das condições
+no ensaio Linux futuro. Só depois, submeter o ensaio único da seção 6
+para aprovação. Correlacionar, no mesmo ensaio, estado inicial, trilhos,
+GFPS, retomada do host, CS e clocks no módulo, TX/RX, comprimento e retorno
+por fase. Se CS ou clocks divergirem com a retomada reportada, localizar a
+camada responsável antes de propor correção. Se a transação chegar conforme
+o contrato e MISO permanecer sem resposta válida, preservar o registro e
+investigar a prontidão do sensor. Se faltar sincronização, manter a causa
+indeterminada. Para A03-05, exigir resposta Linux interpretável para o
+comando delimitado. A referência Windows ajuda a validar o método de
+observação, e a aceitação depende de evidência Linux.
 
 ## 5. Preparar o contrato de um futuro transporte mínimo
 

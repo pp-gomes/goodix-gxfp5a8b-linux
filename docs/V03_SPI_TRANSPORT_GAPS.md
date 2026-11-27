@@ -232,6 +232,88 @@ continuam indeterminados. O escopo auditado trata do host SPI e
 deixa em aberto a função de GFPS e a alimentação do sensor.
 [Fonte Ubuntu revisado](https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/noble/tree/?id=60e65196d87a3b82950ceb158a08953b6468c785)
 
+## Primeira execução do coletor Windows e comparação de energia
+
+A execução real em 27/11/2026 às 08:47 UTC, no Windows 11 build 26300,
+gerou Markdown e JSON de esquema 1. A conferência local confirmou igualdade
+dos 73 registros na ordem de emissão, com 60 encontrados, 11 ausentes,
+2 não aplicáveis e zero inacessíveis. Os dois itens não aplicáveis são a
+associação via descritor SPB desta inicialização e a observação de clock, CS
+e energia durante transferência. Os relatórios integrais ficam no acervo privado.
+
+| Evidência administrativa | Resultado |
+| --- | --- |
+| Controlador | PCI 8086:34AB, SUBSYS 03651854, revisão 30, driver 30.100.1932.6. Serviço `iaLPSS2_SPI` em `Running`, com dependência `SpbCx` |
+| SYS no caminho do serviço | SHA-256 `efd2eea34f64d9ee8aaa1d4ac2885686504011547b1de3350e95d2884f561712`, correspondente ao arquivo já analisado |
+| Periférico | HID ACPI `GXFP5A8B`, driver 3.1.100.320 |
+| PnP | `ProblemCode = 0` em ambos. Eventos 400 e 410 para ambos em 01/11/2026 às 09:38 UTC. Sem retorno de 411 na janela filtrada de 30 dias, com limite de 20 eventos por dispositivo |
+| Diagnóstico Intel | Canais Debug e Performance presentes e desabilitados |
+| Política persistente | `WdfDirectedPowerTransitionEnable = 1` |
+
+Na localização consultada sob `Intel Parameters` estavam ausentes
+`SourceClockFrequency`, `DividerMValue`, `LoopbackMode`, `MosiStateOnRead`,
+`DynamicClockGating`, `MonitorOnIdleTimeout`, `MonitorOffIdleTimeout`,
+`DmaInit`, `DmaThreshold`, `CsSetupTime` e `CsHoldTime`.
+O resultado delimita os valores persistentes pesquisados. Os valores
+efetivos continuam indeterminados, inclusive após os ajustes por variante
+que a análise estática identificou.
+
+| Campo de CM_POWER_DATA | Intel | Goodix | O que representa |
+| --- | --- | --- | --- |
+| MostRecentPowerState | 4 (D3) | 4 (D3) | Último estado registrado pelo PnP, sem discriminar D3hot/D3cold |
+| CapabilitiesMask | 9 (0x09) | 153 (0x99) | Ambos anunciam D0 e D3. Goodix também anuncia wake a partir de D0 e D3 |
+| S0/S1/S2/S3/S4/S5DeviceState | 1/0/0/1/4/4 | 1/0/0/1/4/4 | Mapeamento de capacidades por estado do sistema, com D0 em S0/S3, indefinido em S1/S2 e D3 em S4/S5 |
+| DeepestSystemWake | 0 (indefinido) | 1 (S0) | Estado de sistema mais profundo reportado para wake. Usa enumeração de estados do sistema |
+| D1/D2/D3Latency_us | 0/0/0 | 0/0/0 | Latências declaradas de retorno a D0. Os zeros coletados não medem o tempo de retomada |
+
+Os campos de capacidade não indicam que wake estava armado ou ocorreu.
+`Running` e `ProblemCode = 0` descrevem serviço e PnP. O D3 de cada nó
+é uma leitura administrativa independente, sem evidência de simultaneidade,
+alimentação do módulo, nível de GFPS ou prontidão do MCU. O controlador
+operacional é pré-condição para transacionar. Confirmar essa condição ainda
+deixa em aberto a energia e a prontidão do periférico.
+[CM_POWER_DATA](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-cm_power_data_s) ·
+[Máscaras PDCAP](https://learn.microsoft.com/en-us/windows/win32/api/powrprof/nf-powrprof-devicepowerenumdevices) ·
+[DeviceState](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/devicestate) ·
+[D3cold](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/supporting-d3cold-in-a-driver)
+
+No Windows, o valor WDF coletado indica configuração de adesão ao DFx,
+condicionada ao suporte e à política S0 Idle aplicável. O snapshot não
+registra callbacks, política efetiva ou transição dirigida. A análise
+estática anterior encontrou reinicialização na entrada em D0 do host e
+`StopIdle` com espera seguido por `ResumeIdle` no helper condicional do
+cliente Goodix, sem prova de referência contínua pela sequência histórica.
+Os 5 s do S0 Idle do Goodix e os caminhos de timeout do Intel dependentes
+do monitor pertencem a políticas distintas. Nenhum desses valores equivale
+aos 50 ms de autosuspend do filho pxa2xx.
+[DFx e WDF](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-the-directed-power-management-framework)
+
+No Linux, a auditoria anterior dos fontes Ubuntu autenticados
+[comparou as revisões -42 e -43](../src/README.md#comparação-dos-fontes-ubuntu--42-e--43).
+Com `auto_runtime_pm` ativo no pxa2xx, o SPI core obtém uma referência
+síncrona no dispositivo pai do controlador SPI antes da atividade ao sair
+de idle e interrompe o caminho de envio em caso de falha. O filho pxa2xx
+habilita seu clock na retomada. Quando o pai PCI/LPSS necessita retomar,
+restaura o contexto privado. A referência protege o período ativo da
+fila. Entre mensagens separadas, uma vez liberada a referência, pode haver
+nova suspensão. F1 e RX pertencem à mesma mensagem. A política da hierarquia
+Linux e os callbacks WDF têm objetivos comparáveis de disponibilidade do
+host, com estados e escopos próprios.
+[Runtime PM](https://docs.kernel.org/power/runtime_pm.html)
+
+Os snapshots históricos posteriores mostram inatividade permitida no
+controlador e no pai PCI. A coincidência entre a espera histórica
+E5→F0 de 50–55 ms e o autosuspend de 50 ms torna uma suspensão possível.
+A linha do tempo arquivada é um modelo de cenários. Falta trace da mesma
+execução que confirme suspensão e retomada antes de F0/F1, retorno dos
+callbacks e correlação com clocks e CS. O histórico de transferências
+concluídas com `FF FF` enfraquece a hipótese de falha de PM propagada.
+Continua aberta a possibilidade de uma retomada reportada como bem-sucedida
+com saída incorreta no host ou sensor indisponível. Não foi demonstrada
+uma incompatibilidade que sustente correção offline. Um snapshot Linux
+atual de runtime PM foi dispensado por não discriminar os cenários dos
+ensaios históricos.
+
 ## Condição para retomar o trabalho físico
 
 Concluir primeiro o dossiê e os gates de [NEXT_STEPS.md](NEXT_STEPS.md).
