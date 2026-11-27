@@ -30,9 +30,12 @@ do prazo lógico.
 
 ## Identidade e ciclo de vida Linux
 
-O Kbuild compila os objetos para revisão. Os pontos de entrada
-`gx_spi_linux_probe` e `gx_spi_linux_remove` ficam sem registro no SPI core.
-O executor retorna `-EOPNOTSUPP` por uma constante de compilação.
+O Kbuild liga os componentes em `goodix_gxfp5a8b.ko` para revisão offline.
+O descritor `gx_spi_driver` usa uma tabela ACPI exclusiva para GXFP5A8B e
+aponta para `gx_spi_linux_probe` e `gx_spi_linux_remove`. O artefato não
+tem funções de inicialização/saída do módulo, registro no SPI core ou
+aliases de autoload. O executor retorna `-EOPNOTSUPP` por uma constante de
+compilação.
 
 `gx_spi_linux_check_client` exige o cliente enumerado pelo SPI core, com HID
 GXFP5A8B, associação física única a FPNT e perfil nativo revisado (CS 0,
@@ -82,3 +85,19 @@ O bloqueio físico é exercitado pelo executor real desabilitado. A compilação
 confere as APIs de kernel usadas no adaptador. A suíte KUnit de pesquisa
 continua cobrindo o protocolo MCU, staging, eventos e o próprio ciclo de
 vida, com [resultados preservados](../../docs/evidence/README.md).
+
+Para compilar e auditar o artefato completo, use os headers Ubuntu alvo e
+GCC 13. Execute da raiz do projeto e mantenha os resultados no diretório
+temporário:
+
+```sh
+build=$(mktemp -d)
+cp src/spi/Kbuild src/spi/*.c src/spi/*.h "$build/"
+make -C /usr/src/linux-headers-7.0.0-43-generic M="$build" W=1 \
+    CC=x86_64-linux-gnu-gcc-13 modules
+sh tests/spi/audit-module.sh "$build/goodix_gxfp5a8b.ko"
+```
+
+A auditoria confere as relocações dos callbacks, os metadados, a ausência
+de entradas de módulo e o conjunto de imports admitidos para essa revisão.
+A verificação complementa a guarda em C e os testes sintéticos.

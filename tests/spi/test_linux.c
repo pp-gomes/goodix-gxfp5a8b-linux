@@ -75,13 +75,17 @@ static void finish_fixture(struct fixture *f)
 static void test_identity(void)
 {
 	struct device rival = { .class = &mock_spi_class };
+	struct device dma = { .kind = MOCK_PLATFORM };
 	struct acpi_device_physical_node competing = { .dev = &rival };
+	struct acpi_device_physical_node dma_node = { .dev = &dma };
 	struct fixture f;
 
 	init_fixture(&f);
 	assert(!gx_spi_linux_check_client(&f.spi));
 
-	f.controller_nodes[2].next = &competing;
+	f.controller_nodes[2].next = &dma_node;
+	assert(!gx_spi_linux_check_client(&f.spi));
+	dma_node.next = &competing;
 	assert(gx_spi_linux_check_client(&f.spi) == -ENODEV);
 	f.controller_nodes[2].next = NULL;
 	f.client.physical_node_count = 2;
